@@ -27,7 +27,7 @@ class EntropyCompute:
     def calcEntropy(filename):
         ftm = fileToMatrix.FileToMatrix
         ec = EntropyCompute
-        vectorSpace, featurenames = ftm.fileToVectorSpace_fromSecondColumn(filename)
+        vectorSpace, featurenames = ftm.fileToVectorSpace_from2ndColumn_usefulAttr(filename)
         vectorSpaceT = ftm.rowToColTransposition(vectorSpace)
         entropy_array = []
         normalized_entropy_array = []
@@ -44,7 +44,7 @@ class EntropyCompute:
     def calcEntropy_inWholeDataset(filenames):
         ftm = fileToMatrix.FileToMatrix
         ec = EntropyCompute
-        vectorSpace, featurenames = ftm.VectorSpace_InWoleDataset_fromSecondColumn(filenames)
+        vectorSpace, featurenames = ftm.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(filenames)
         vectorSpaceT = ftm.rowToColTransposition(vectorSpace)
         entropy_array = []
         normalized_entropy_array = []
