@@ -66,7 +66,7 @@ class chiSquaredTest:
         cc = chiSquaredTest
         for file in main.filenames:
             results_of_file = []
-            vectorSpace, features = FileToMatrix.fileToVectorSpace_fromSecondColumn(file) #we need only the list of features
+            vectorSpace, features = FileToMatrix.fileToVectorSpace_from2ndColumn_usefulAttr(file) #we need only the list of features
             feature1_index = -1
             p_table_file = []
             complete_p_table_row_with_zero_index = 0
@@ -103,9 +103,11 @@ class chiSquaredTest:
 
         # returns freq_matrix, feature_names
 
+
+
     def freq_matrix(filename, indexOfFeature1, indexOfFeature2):
             cc = chiSquaredTest
-            vectorSpace, feature_names_list = FileToMatrix.fileToVectorSpace_fromSecondColumn(filename)
+            vectorSpace, feature_names_list = FileToMatrix.fileToVectorSpace_from2ndColumn_usefulAttr(filename)
             numOfFeature1Values, feature1_hashtable = cc.featureHashTable(vectorSpace, indexOfFeature1)
             numOfFeature2Values, feature2_hashtable = cc.featureHashTable(vectorSpace, indexOfFeature2)
             freq_table = []
@@ -129,6 +131,9 @@ class chiSquaredTest:
                                     if rs2.replace(" ", "") == feature2.replace(" ", ""):
                                         freq_table[index1][index2] += 1
             return freq_table, feature_names_list, feature1_hashtable, feature2_hashtable
+
+
+
 
 
     # mode=1: simm with all, mode=2:gender with all
@@ -176,7 +181,7 @@ class chiSquaredTest:
 
     def freq_matrix_wholeDataset(filenames, indexOfFeature1, indexOfFeature2):
         cc = chiSquaredTest
-        vectorSpace, feature_names_list = FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn(main.filenames)
+        vectorSpace, feature_names_list = FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(main.filenames)
         numOfFeature1Values, feature1_hashtable = cc.featureHashTable(vectorSpace, indexOfFeature1)
         numOfFeature2Values, feature2_hashtable = cc.featureHashTable(vectorSpace, indexOfFeature2)
         freq_table = []
@@ -247,7 +252,8 @@ class chiSquaredTest:
         print(freqOfGender)
         return freqOfGender
 
-    # number of lemma
+
+    #
     def featureHashTable(matrix, indexOfFeature):
         cc = chiSquaredTest
         hashtable = {}  # key - frequent
@@ -264,12 +270,14 @@ class chiSquaredTest:
                         numOfKeys += 1
         return numOfKeys, hashtable
 
+    #
     def countOfHashtableKeys(hashTable):
         count = 0
         for k in hashTable.keys():
             count += 1
         return count
 
+    #
     def SumOfHashtableValues(hashTable):
         sum = 0
         for k in hashTable.keys():
@@ -292,7 +300,7 @@ class chiSquaredTest:
     # inexOfFeature --> sim: 0, lemma: 3, mwe: 4, phenomenon: 5
     def sim_feature_freq_matrix(filename, indexOfFeature):
         cc = chiSquaredTest
-        vectorSpace = FileToMatrix.fileToVectorSpace_fromSecondColumn(filename)
+        vectorSpace = FileToMatrix.fileToVectorSpace_from2ndColumn_usefulAttr(filename)
         numOfFeatureValues, feature_hashtable = cc.featureHashTable(vectorSpace, indexOfFeature)
         a = []
         b = []

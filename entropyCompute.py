@@ -11,16 +11,16 @@ class EntropyCompute:
         for file in main.filenames:
             entropy, normEntropy, freqKey, featureNames = EntropyCompute.calcEntropy(file)
             print("\r\n\r\n" + file)
-            print('%-24s%-12s%-20s%-12s' % ("Feature", "Entropy", "Normalized Entropy", "Frequency of values"))
+            print('%-28s%-12s%-20s%-12s' % ("Feature", "Entropy", "Normalized Entropy", "Frequency of values"))
             for a, b, c, d in zip(entropy, normEntropy, freqKey, featureNames):
                 #print('{}\t\t{}\t{}\t{}'.format(d, a, b, c))
-                print('\r%-24s%-12s%-20s%-12s' % (d, a, b, c))
+                print('\r%-28s%-12s%-20s%-12s' % (d, a, b, c))
         entropy, normEntropy, freqKey, featureNames = EntropyCompute.calcEntropy_inWholeDataset(main.filenames)
         print("\r\n\r\nEntropy in Whole Dataset")
-        print('%-24s%-12s%-20s%-12s' % ("Feature", "Entropy", "Normalized Entropy", "Frequency of values"))
+        print('%-28s%-12s%-20s%-12s' % ("Feature", "Entropy", "Normalized Entropy", "Frequency of values"))
         for a, b, c, d in zip(entropy, normEntropy, freqKey, featureNames):
             # print('{}\t\t{}\t{}\t{}'.format(d, a, b, c))
-            print('\r%-24s%-12s%-20s%-12s' % (d, a, b, c))
+            print('\r%-28s%-12s%-20s%-12s' % (d, a, b, c))
 
 
 
