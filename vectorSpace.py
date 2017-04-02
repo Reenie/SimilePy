@@ -1,49 +1,107 @@
-import fileToMatrix
+import fileToMatrix as f
 import main
 
 
-class vectorSpace:
+class VectorSpace:
+    def __init__(self):
+        numericalFeature_names, numericalVS = VectorSpace.numericalVectorSpace('self', main.filenames)
+        file = main.dataset_path + "numericalVectorSpace.txt"
+        VectorSpace.writeNumericalVSToFile(self, numericalVS, numericalFeature_names, file)
 
-    def createVectorSpace(self):
 
 
-    def newFeatureName(self):
-        categoricalVS, feature_names = fileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(main.filenames)
-        new_features = []
-        count_row = 0
+    def writeNumericalVSToFile(self, numericalVS, numericalFeature_names, file):
+        file = open(file, "w")
+        for col in numericalFeature_names:
+            file.write(str(col) + " # ")
+        file.write("\n")
+        for row in numericalVS:
+            for col in row:
+                file.write(str(col) + " # ")
+            file.write("\n")
+        file.close()
+
+
+    def numericalVectorSpace(self, filenames):
+        categoricalVS, categoricalFeature_names = f.FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(filenames)
+        numericalFeature_names = VectorSpace.numFeatureNames('self', categoricalVS, categoricalFeature_names)
+        #print(numericalFeature_names)
+        numericalVS = []
+        len_ = len(numericalFeature_names)
         for row in categoricalVS:
-            count_row+=1
-            count_col = 0
-            for column in row:
-                count_col+=1
-
-
-    #
-    def featureHashTable(matrix, indexOfFeature):
-        vs = vectorSpace
-        hashtable = {}  # key - frequent
-        numOfKeys = 0
-        for row in matrix:
-            val = row[indexOfFeature].split(",")
-            for v in val:
-                if vs.hasKey(hashtable, v.replace(" ", "")):
-                    if v.replace(" ", "") != "null":
-                        hashtable[v.replace(" ", "")] += 1
+            col_index = -1
+            numerical_row = [0]*len_  #array initialization to zero
+            for c in row:
+                col_index +=1
+                if categoricalFeature_names[col_index] == "SIM":
+                    if c == "1":
+                        index = numericalFeature_names.index("SIM")
+                        numerical_row[index]=1
+                elif categoricalFeature_names[col_index] == "DETERMINER":
+                    if c == "det":
+                        index = numericalFeature_names.index("DETERMINER")
+                        numerical_row[index] = 1
+                elif categoricalFeature_names[col_index] == "LEMMA":
+                    if c.replace(" ", "")!="normal":
+                        numerical_feature_name = "L_" + c.replace(" ", "")
+                        index = numericalFeature_names.index(numerical_feature_name)
+                        numerical_row[index] = 1
+                elif categoricalFeature_names[col_index] == "TEN_GEN_SEMS":
+                    if c.replace(" ", "")!="normal":
+                        numerical_feature_name = "T_" + c.replace(" ", "")
+                        index = numericalFeature_names.index(numerical_feature_name)
+                        numerical_row[index] = 1
                 else:
-                    if v.replace(" ", "") != "null":
-                        hashtable[v.replace(" ", "")] = 1
-                        numOfKeys += 1
-        return numOfKeys, hashtable
+                    if c.replace(" ", "")!="normal":
+                        numerical_feature_name = c.replace(" ", "")
+                        index = numericalFeature_names.index(numerical_feature_name)
+                        numerical_row[index] = 1
+            numericalVS.append(numerical_row)
+        #print(numericalFeature_names)
+        #print("\n")
+        #print(numericalVS)
+        return numericalFeature_names, numericalVS
 
-    #
-    def hashTableKeys(hashTable):
-        keys = []
-        for k in hashTable.keys():
-            keys.append(k)
-        return keys
 
-    def hasKey(hashTable, key):
-        for k in hashTable.keys():
-            if k == key:
-                return 1
-        return 0
+
+    # it returns an array with numerical feature names
+    def numFeatureNames(self, categoricalVS, categoricalFeature_names):
+        numerical_feature_names = []
+        # index_numFeatures = -1
+        index_catFeatures = -1
+        for c in categoricalFeature_names:
+            index_catFeatures += 1
+            if index_catFeatures == 1:
+                numerical_feature_names.append('SIM')
+            elif index_catFeatures == 6:
+                numerical_feature_names.append('DETERMINER')
+            else:
+                numerical_features = VectorSpace.numericalFeatures('self', categoricalVS, index_catFeatures, c)
+                #print(numerical_features)
+                for n in numerical_features:
+                    numerical_feature_names.append(n)
+        #print(numerical_feature_names)
+        return numerical_feature_names
+
+    # it returns array with numerical feature names
+    def numericalFeatures(self, categoricalVS, indexOfFeature, categorical_feature_name):
+        vs = VectorSpace  # this class
+        numerical_feature_names = []
+        for row in categoricalVS:
+            row_val = row[indexOfFeature].replace(" ", "")
+            if row_val != "normal":
+                val = ""
+                if categorical_feature_name == "LEMMA":
+                    val = "L_" + row_val
+                elif categorical_feature_name == "TEN_GEN_SEMS":
+                    val = "T_" + row_val
+                else:
+                    val = row_val
+                if not (val in numerical_feature_names):
+                    numerical_feature_names.append(val)
+        return numerical_feature_names
+
+
+
+
+VectorSpace()
