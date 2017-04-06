@@ -1,3 +1,5 @@
+
+
 from matplotlib import style
 from sklearn.cluster import KMeans
 from sklearn.cluster import MeanShift  # as ms
@@ -12,6 +14,7 @@ style.use("ggplot")
 import numpy as np
 
 import matplotlib
+import random
 from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.cluster.hierarchy import cophenet
@@ -27,40 +30,47 @@ class clustering:
     # def som_test(self):
 
 
+    def cluster_points(X, mu):
+        clusters = {}
+        for x in X:
+            bestmukey = min([(i[0], np.linalg.norm(x - mu[i[0]])) \
+                             for i in enumerate(mu)], key=lambda t: t[1])[0]
+            try:
+                clusters[bestmukey].append(x)
+            except KeyError:
+                clusters[bestmukey] = [x]
+        return clusters
+
+    def reevaluate_centers(mu, clusters):
+        newmu = []
+        keys = sorted(clusters.keys())
+        for k in keys:
+            newmu.append(np.mean(clusters[k], axis=0))
+        return newmu
+
+    def has_converged(mu, oldmu):
+        return (set([tuple(a) for a in mu]) == set([tuple(a) for a in oldmu]))
+
+    def find_centers(X, K):
+        # Initialize to K random centers
+        oldmu = random.sample(X, K)
+        mu = random.sample(X, K)
+        while not clustering.has_converged(mu, oldmu):
+            oldmu = mu
+            # Assign all points in X to clusters
+            clusters = clustering.cluster_points(X, mu)
+            # Reevaluate centers
+            mu = clustering.reevaluate_centers(oldmu, clusters)
+        return (mu, clusters)
+
+
     def test3(self):
         feature_names, vector_space = vs2.VectorSpace.numericalVectorSpace("self", main.filenames)
         vector_space = np.array(vector_space)
         X= vector_space[1:, 1:]
         x_target = vector_space[1:,0]
-        #print(X.shape)
-        #print(x_target)
-        #plt.scatter(X[:, 0], X[:, 1])
-        #plt.show()
-        # generate the linkage matrix
-        Z = linkage(X, 'ward')
-        c, coph_dists = cophenet(Z, pdist(X))
-        print(c)
-        print(Z[0])
-        print(Z[1])
-        print(Z[20])
-        print(X[[33, 68, 62]])
-        idxs = [33, 68, 62]
-        plt.figure(figsize=(10, 8))
-        plt.scatter(X[:, 0], X[:, 1])  # plot all points
-        plt.scatter(X[idxs, 0], X[idxs, 1], c='r')  # plot interesting points in red again
-        plt.show()
+        print(clustering.find_centers(X, 3))
 
-        # calculate full dendrogram
-        plt.figure(figsize=(25, 10))
-        plt.title('Hierarchical Clustering Dendrogram')
-        plt.xlabel('sample index')
-        plt.ylabel('distance')
-        dendrogram(
-            Z,
-            leaf_rotation=90.,  # rotates the x axis labels
-            leaf_font_size=8.,  # font size for the x axis labels
-        )
-        plt.show()
 
 
 

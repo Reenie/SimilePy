@@ -85,7 +85,7 @@ class VectorSpace:
                 #print(numerical_features)
                 for n in numerical_features:
                     numerical_feature_names.append(n)
-        print(numerical_feature_names)
+        #print(numerical_feature_names)
         return numerical_feature_names
 
 
