@@ -4,8 +4,8 @@ linux_dataset_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/
 win_statistics_path = "E:/Dropbox/EMP_DID_dropbox/NLP/SIMILES/statistics/"
 linux_statistics_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/Statistics/"
 
-dataset_path = win_dataset_path
-statistics_path = win_statistics_path
+dataset_path = linux_dataset_path
+statistics_path = linux_statistics_path
 
 filenames = ["1_aspros_san_to_pani.txt",
              "2_stolismenos_san_fregata.txt",
