@@ -1,5 +1,3 @@
-
-
 from matplotlib import style
 from sklearn.cluster import KMeans
 from sklearn.cluster import MeanShift  # as ms
@@ -19,49 +17,51 @@ from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 from scipy.cluster.hierarchy import cophenet
 from scipy.spatial.distance import pdist
-
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 class clustering:
     def __init__(self):
         # clustering.clustering_test("self")
         # clustering.test2("self")
-        clustering.test3('self')
+        clustering.lda('self')
+
+        #iris = datasets.load_iris()
+        #print(iris.data)
+
+        #print(iris.target)
+        #print(iris.target_names)
 
     # def som_test(self):
 
 
-    def cluster_points(X, mu):
-        clusters = {}
-        for x in X:
-            bestmukey = min([(i[0], np.linalg.norm(x - mu[i[0]])) \
-                             for i in enumerate(mu)], key=lambda t: t[1])[0]
-            try:
-                clusters[bestmukey].append(x)
-            except KeyError:
-                clusters[bestmukey] = [x]
-        return clusters
+    #LDA - Linear Discriminant Analysis
+    def  lda(self):
+        feature_names, vector_space = vs2.VectorSpace.numericalVectorSpace("self", main.filenames)
+        vector_space = np.array(vector_space)
+        X = vector_space[1:, 1:]
+        X = X.astype(float)
+        y = vector_space[1:, 0]
+        y = y.astype(float)
+        target_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        lda = LinearDiscriminantAnalysis(n_components=2)
+        X_r2 = lda.fit(X, y).transform(X)
+        colors = ['magenta', 'turquoise', 'brown',
+                  'red', 'black', 'blue',
+                  'pink', 'green', 'orange',
+                  'yellow']
+        for color, i, target_name in zip(colors, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], target_names):
+            plt.scatter(X_r2[y == i, 0], X_r2[y == i, 1], alpha=.8, color=color,
+                        label=target_name)
+        plt.legend(loc='best', shadow=False, scatterpoints=1)
+        plt.title('LDA of simile dataset')
+        plt.show()
 
-    def reevaluate_centers(mu, clusters):
-        newmu = []
-        keys = sorted(clusters.keys())
-        for k in keys:
-            newmu.append(np.mean(clusters[k], axis=0))
-        return newmu
 
-    def has_converged(mu, oldmu):
-        return (set([tuple(a) for a in mu]) == set([tuple(a) for a in oldmu]))
 
-    def find_centers(X, K):
-        # Initialize to K random centers
-        oldmu = random.sample(X, K)
-        mu = random.sample(X, K)
-        while not clustering.has_converged(mu, oldmu):
-            oldmu = mu
-            # Assign all points in X to clusters
-            clusters = clustering.cluster_points(X, mu)
-            # Reevaluate centers
-            mu = clustering.reevaluate_centers(oldmu, clusters)
-        return (mu, clusters)
+
 
 
     def test3(self):
