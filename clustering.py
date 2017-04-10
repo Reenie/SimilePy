@@ -10,13 +10,16 @@ import matplotlib
 import random
 import matplotlib.pyplot as plt
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+#from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.model_selection import KFold
+from sklearn.metrics import classification_report
 
 class clustering:
     def __init__(self):
         # clustering.clustering_test("self")
         # clustering.test2("self")
-        for a in range(10):
-            clustering.lda('self')
+        #for a in range(10):
+        clustering.lda_kfoldCrossValidation('self')
 
         #iris = datasets.load_iris()
         #print(iris.data)
@@ -26,10 +29,13 @@ class clustering:
 
         #def som_test(self):
 
+    #kf = KFold(n_splits=2)
+    #for train, test in kf.split(X):
+
 
     #LDA - Linear Discriminant Analysis
     def lda(self):
-        x_train, x_test, y_train, y_test, target_values = clustering.readAndSplitData('self', 0.90)
+        x_train, x_test, y_train, y_test, target_values = clustering.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(n_components=2)
         x_d2_results = []
         #for a in range(1):
@@ -46,22 +52,101 @@ class clustering:
         plt.legend(loc='best', shadow=False, scatterpoints=1)
         plt.title('LDA of simile dataset')
 
-
         y_pred = lda.predict(x_test)
         #print(y_pred)
         t = 0
         f = 0
         for y, y_t in zip(y_pred, y_test):
-            print(str(y) + " _ " + str(y_t))
+
             if(y == y_t):
                 t += 1
+                print(str(y) + " _ " + str(y_t))
             else:
                 f += 1
+                print(str(y) + " _ " + str(y_t) + 'Error')
         print(str(t) + " " + str(f))
         print(str(t/(t+f)))
         plt.show()
 
 
+
+    #LDA - Linear Discriminant Analysis
+    def lda_kfoldCrossValidation(self):
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values = clustering.readAndSplitKFoldsData('self', 10)
+        lda = []
+        x_d2_list = []
+        #for a in range(1):
+        index = -1
+        precision = []
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            l = LinearDiscriminantAnalysis(solver='svd', n_components=2)
+            #l = QuadraticDiscriminantAnalysis(store_covariances=True)
+            lda.append(l)
+            x_d2 = lda[index].fit(x_train, y_train).transform(x_train)
+            x_d2_list.append(x_d2)
+            y_pred = lda[index].predict(x_test)
+            # print(y_pred)
+            t = 0
+            f = 0
+            for y, y_t in zip(y_pred, y_test):
+                if (y == y_t):
+                    t += 1
+                    #print(str(y) + " _ " + str(y_t))
+                else:
+                    f += 1
+                    #print(str(y) + " _ " + str(y_t) + ' Error')
+            print(str(t) + " " + str(f))
+            print(str(t / (t + f)))
+            print(classification_report(y_test, y_pred))
+            precision.append(t / (t + f))
+            #X_r2 = x_d2_list[0] #np.mean(x_d2_list, axis=0)
+            colors = ['magenta', 'turquoise', 'brown',
+                  'red', 'black', 'blue',
+                  'pink', 'green', 'orange',
+                  'yellow']
+            for color, i in zip(colors, target_values):
+                plt.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, label=int(i))
+            plt.legend(loc='best', shadow=False, scatterpoints=1)
+            plt.title('LDA of simile dataset')
+            plt.show()
+        print(np.mean(precision))
+
+
+    def readAndSplitKFoldsData(self, folds):
+        feature_names, vector_space = vs2.VectorSpace.numericalVectorSpace("self", main.filenames)
+        vector_space = np.array(vector_space)
+        x = vector_space[1:, 0:]
+        np.random.shuffle(x)
+        x = x.astype(float)
+        #print(x[0:, 0])
+        target_values = []
+        #for y_target
+        for tn in x[1:, 0]:
+            if not (tn in target_values):
+                target_values.append(tn)
+        #print(target_values)
+        x_train_list = []
+        x_test_list = []
+        y_train_list = []
+        y_test_list = []
+        kf = KFold(n_splits=folds)
+        for train, test in kf.split(x):
+            x_t = []
+            y_t = []
+            for i in train:
+                x_t.append(x[i, 1:])
+                y_t.append(x[i, 0])
+            x_train_list.append(x_t)
+            y_train_list.append(y_t)  #target
+            x_t = []
+            y_t = []
+            for i in test:
+                x_t.append(x[i, 1:])
+                y_t.append(x[i, 0])
+            x_test_list.append(x_t)
+            y_test_list.append(y_t)  #target
+        return x_train_list, x_test_list, y_train_list, y_test_list, target_values
 
 
 
