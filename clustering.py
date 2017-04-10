@@ -1,32 +1,22 @@
 from matplotlib import style
 from sklearn.cluster import KMeans
 from sklearn.cluster import MeanShift  # as ms
-
 import main
 import vectorSpace
 import vectorSpace_v2 as vs2
-
 style.use("ggplot")
-
-
 import numpy as np
-
 import matplotlib
 import random
-from matplotlib import pyplot as plt
-from scipy.cluster.hierarchy import dendrogram, linkage
-from scipy.cluster.hierarchy import cophenet
-from scipy.spatial.distance import pdist
 import matplotlib.pyplot as plt
-from sklearn import datasets
-from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 class clustering:
     def __init__(self):
         # clustering.clustering_test("self")
         # clustering.test2("self")
-        clustering.lda('self')
+        for a in range(10):
+            clustering.lda('self')
 
         #iris = datasets.load_iris()
         #print(iris.data)
@@ -34,30 +24,67 @@ class clustering:
         #print(iris.target)
         #print(iris.target_names)
 
-    # def som_test(self):
+        #def som_test(self):
 
 
     #LDA - Linear Discriminant Analysis
-    def  lda(self):
-        feature_names, vector_space = vs2.VectorSpace.numericalVectorSpace("self", main.filenames)
-        vector_space = np.array(vector_space)
-        X = vector_space[1:, 1:]
-        X = X.astype(float)
-        y = vector_space[1:, 0]
-        y = y.astype(float)
-        target_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    def lda(self):
+        x_train, x_test, y_train, y_test, target_values = clustering.readAndSplitData('self', 0.90)
         lda = LinearDiscriminantAnalysis(n_components=2)
-        X_r2 = lda.fit(X, y).transform(X)
+        x_d2_results = []
+        #for a in range(1):
+        X_r2 = lda.fit(x_train, y_train).transform(x_train)
+        #x_d2_results.append(x_r2)
+        #X_r2 = np.mean(x_d2_results, axis=0)
+
         colors = ['magenta', 'turquoise', 'brown',
                   'red', 'black', 'blue',
                   'pink', 'green', 'orange',
                   'yellow']
-        for color, i, target_name in zip(colors, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], target_names):
-            plt.scatter(X_r2[y == i, 0], X_r2[y == i, 1], alpha=.8, color=color,
-                        label=target_name)
+        for color, i in zip(colors, target_values):
+            plt.scatter(X_r2[y_train == i, 0], X_r2[y_train == i, 1], alpha=.8, color=color, label=int(i))
         plt.legend(loc='best', shadow=False, scatterpoints=1)
         plt.title('LDA of simile dataset')
+
+
+        y_pred = lda.predict(x_test)
+        #print(y_pred)
+        t = 0
+        f = 0
+        for y, y_t in zip(y_pred, y_test):
+            print(str(y) + " _ " + str(y_t))
+            if(y == y_t):
+                t += 1
+            else:
+                f += 1
+        print(str(t) + " " + str(f))
+        print(str(t/(t+f)))
         plt.show()
+
+
+
+
+
+    def readAndSplitData(self, training_fraction):
+        feature_names, vector_space = vs2.VectorSpace.numericalVectorSpace("self", main.filenames)
+        vector_space = np.array(vector_space)
+        x = vector_space[1:, 0:]
+        x = x.astype(float)
+        target_values = []
+        #for y_target
+        for tn in x[1:, 0]:
+            if not (tn in target_values):
+                target_values.append(tn)
+        #print(target_values)
+        random.shuffle(x)
+        l = len(x)
+        training_len = int(l*training_fraction)
+        x_train = x[:training_len, 1:]
+        x_test = x[training_len:, 1:]
+        y_train = x[:training_len, 0]  #target
+        y_test = x[training_len:, 0]   #target
+        return x_train, x_test, y_train, y_test, target_values
+
 
 
 
@@ -96,6 +123,7 @@ class clustering:
         ax.scatter(cluster_centers[:, 0], cluster_centers[:, 10], cluster_centers[:, 10],
                    marker="x", color='k', s=150, linewidths=5, zorder=10)
         matplotlib.pyplot.show()
+
 
     def test2(self):
         # x = [1, 5, 1.5, 8, 1, 9]
