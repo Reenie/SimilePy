@@ -1,11 +1,11 @@
 import fileToMatrix as f
 import main
-
+import numpy as np
 
 class VectorSpace_gender:
     def __init__(self):
         vsg = VectorSpace_gender
-        numericalFeature_names, numericalVS = vsg.numericalVectorSpace_3genders(vsg, main.filenames)
+        numericalFeature_names, numericalVS = vsg.numericalVectorSpace_gender(vsg, main.filenames, numOfGender=2)
         file = main.dataset_path + "numericalVectorSpace_gender.txt"
         vsg.writeNumericalVSToFile(vsg, numericalVS, numericalFeature_names, file)
 
@@ -25,10 +25,10 @@ class VectorSpace_gender:
 
     #def numericalVectorSpace_3genders_(self, filenames)
 
-
-    def numericalVectorSpace_3genders(self, filenames):
+    #if numOfGender = 2, M and F is the first gender and N is the second.
+    def numericalVectorSpace_gender(self, filenames, numOfGender=3):
         categoricalVS, categoricalFeature_names = f.FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(filenames)
-        numericalFeature_names = self.numFeatureNames(VectorSpace_gender, categoricalVS, categoricalFeature_names)
+        numericalFeature_names = VectorSpace_gender.numFeatureNames(VectorSpace_gender, categoricalVS, categoricalFeature_names)
         #print(numericalFeature_names)
         numericalVS = []
         len_ = len(numericalFeature_names)
@@ -50,10 +50,16 @@ class VectorSpace_gender:
                         numerical_row[index] = 1
                     elif c == "F":
                         index = numericalFeature_names.index("GENDER")
-                        numerical_row[index] = 2
+                        if (numOfGender == 2):
+                            numerical_row[index] = 1
+                        else:
+                            numerical_row[index] = 2
                     elif c == "N":
                         index = numericalFeature_names.index("GENDER")
-                        numerical_row[index] = 3
+                        if (numOfGender == 2):
+                            numerical_row[index] = 2
+                        else:
+                            numerical_row[index] = 3
                 elif categoricalFeature_names[col_index] == "DETERMINER":
                     if c == "det":
                         index = numericalFeature_names.index("DETERMINER")
@@ -74,6 +80,14 @@ class VectorSpace_gender:
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
             numericalVS.append(numerical_row)
+        #np.array(numericalFeature_names)
+        numericalVS = np.array(numericalVS)
+        temp = numericalFeature_names[2]
+        numericalFeature_names[2] = numericalFeature_names[1]
+        numericalFeature_names[1] = temp
+        temp1 = np.copy(numericalVS[:, 2])
+        numericalVS[:, 2] = numericalVS[:, 1]
+        numericalVS[:, 1] = temp1
         #print(numericalFeature_names)
         #print("\n")
         #print(numericalVS)
