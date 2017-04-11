@@ -14,18 +14,18 @@ from sklearn.metrics import classification_report
 import time
 
 #classification and dimensionality reduction
-class classification:
+class classification_gender:
     def __init__(self):
         start = time.time()
         #clustering.lda_evaluation('self')
-        classification.lda_plot_2d_3d('self')
+        classification_gender.lda_plot_2d_3d('self')
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
     # LDA - Linear Discriminant Analysis
     def lda_evaluation(self):
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            classification.readAndSplitKFoldsData('self', 10)
+            classification_gender.readAndSplitKFoldsData('self', 10)
         lda = []
         x_d2_list = []
         # for a in range(1):
@@ -68,7 +68,7 @@ class classification:
             fscore_list.append(fs)
             suport_list.append(sup)
         labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
-            classification.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
+            classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
         labels = ["1_aspr", "2_stol", "3_apal_p", "4_apal_x", "5_elafr", "6_kokkin", "7_oplism", "8_malak", "9_geros", "10_pist" ]
         print('%-14s%-14s%-14s%-14s%-14s' % ("Simile", "Precision", "Recall", "F1-score", "Support"))
         #labels = labels_list[0]
@@ -140,7 +140,7 @@ class classification:
         figure_number = 0
         for i in range(3):
             figure_number +=2
-            x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
+            x_train, x_test, y_train, y_test, target_values = classification_gender.readAndSplitData('self', 1)
             lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
             x_d2 = lda.fit(x_train, y_train).transform(x_train)
             colors = ['magenta', 'turquoise', 'brown',
@@ -174,7 +174,7 @@ class classification:
 
     #LDA - Linear Discriminant Analysis
     def lda_plot(self):
-        x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
+        x_train, x_test, y_train, y_test, target_values = classification_gender.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(n_components=2)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
         colors = ['magenta', 'turquoise', 'brown',
@@ -212,7 +212,7 @@ class classification:
 
     #LDA - Linear Discriminant Analysis
     def lda_plot_3d(self):
-        x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
+        x_train, x_test, y_train, y_test, target_values = classification_gender.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
         colors = ['magenta', 'turquoise', 'brown',
@@ -234,7 +234,7 @@ class classification:
 
     #LDA - Linear Discriminant Analysis
     def lda_kfoldCrossValidation(self):
-        x_train_list, x_test_list, y_train_list, y_test_list, target_values = classification.readAndSplitKFoldsData('self', 10)
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values = classification_gender.readAndSplitKFoldsData('self', 10)
         lda = []
         x_d2_list = []
         #for a in range(1):
@@ -278,6 +278,8 @@ class classification:
     def readAndSplitKFoldsData(self, folds):
         feature_names, vector_space = vs2.VectorSpace_v2.numericalVectorSpace("self", main.filenames)
         vector_space = np.array(vector_space)
+
+
         x = vector_space[1:, 0:]
         np.random.shuffle(x)
         x = x.astype(float)
@@ -312,26 +314,5 @@ class classification:
 
 
 
-    def readAndSplitData(self, training_fraction):
-        feature_names, vector_space = vs2.VectorSpace_v2.numericalVectorSpace("self", main.filenames)
-        vector_space = np.array(vector_space)
-        x = vector_space[1:, 0:]
-        x = x.astype(float)
-        target_values = []
-        #for y_target
-        for tn in x[1:, 0]:
-            if not (tn in target_values):
-                target_values.append(tn)
-        #print(target_values)
-        random.shuffle(x)
-        l = len(x)
-        training_len = int(l*training_fraction)
-        x_train = x[:training_len, 1:]
-        x_test = x[training_len:, 1:]
-        y_train = x[:training_len, 0]  #target
-        y_test = x[training_len:, 0]   #target
-        return x_train, x_test, y_train, y_test, target_values
 
-
-
-classification()
+classification_gender()

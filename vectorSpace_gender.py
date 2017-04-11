@@ -2,11 +2,12 @@ import fileToMatrix as f
 import main
 
 
-class VectorSpace_v2:
+class VectorSpace_gender:
     def __init__(self):
-        numericalFeature_names, numericalVS = VectorSpace.numericalVectorSpace('self', main.filenames)
-        file = main.dataset_path + "numericalVectorSpace.txt"
-        VectorSpace_v2.writeNumericalVSToFile(self, numericalVS, numericalFeature_names, file)
+        vsg = VectorSpace_gender
+        numericalFeature_names, numericalVS = vsg.numericalVectorSpace_3genders(vsg, main.filenames)
+        file = main.dataset_path + "numericalVectorSpace_gender.txt"
+        vsg.writeNumericalVSToFile(vsg, numericalVS, numericalFeature_names, file)
 
 
 
@@ -22,9 +23,12 @@ class VectorSpace_v2:
         file.close()
 
 
-    def numericalVectorSpace(self, filenames):
+    #def numericalVectorSpace_3genders_(self, filenames)
+
+
+    def numericalVectorSpace_3genders(self, filenames):
         categoricalVS, categoricalFeature_names = f.FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(filenames)
-        numericalFeature_names = VectorSpace_v2.numFeatureNames('self', categoricalVS, categoricalFeature_names)
+        numericalFeature_names = self.numFeatureNames(VectorSpace_gender, categoricalVS, categoricalFeature_names)
         #print(numericalFeature_names)
         numericalVS = []
         len_ = len(numericalFeature_names)
@@ -40,6 +44,16 @@ class VectorSpace_v2:
                     if c == "1":
                         index = numericalFeature_names.index("SIM")
                         numerical_row[index]=1
+                elif categoricalFeature_names[col_index] == "GENDER":
+                    if c == "M":
+                        index = numericalFeature_names.index("GENDER")
+                        numerical_row[index] = 1
+                    elif c == "F":
+                        index = numericalFeature_names.index("GENDER")
+                        numerical_row[index] = 2
+                    elif c == "N":
+                        index = numericalFeature_names.index("GENDER")
+                        numerical_row[index] = 3
                 elif categoricalFeature_names[col_index] == "DETERMINER":
                     if c == "det":
                         index = numericalFeature_names.index("DETERMINER")
@@ -78,10 +92,12 @@ class VectorSpace_v2:
                 numerical_feature_names.append('Simile_id')
             elif index_catFeatures == 1:
                 numerical_feature_names.append('SIM')
+            elif index_catFeatures == 2:
+                numerical_feature_names.append('GENDER')
             elif index_catFeatures == 6:
                 numerical_feature_names.append('DETERMINER')
             else:
-                numerical_features = VectorSpace_v2.numericalFeatures('self', categoricalVS, index_catFeatures, c)
+                numerical_features = self.numericalFeatures('self', categoricalVS, index_catFeatures, c)
                 #print(numerical_features)
                 for n in numerical_features:
                     numerical_feature_names.append(n)
@@ -91,7 +107,7 @@ class VectorSpace_v2:
 
     # it returns array with numerical feature names of a specific categorical feature
     def numericalFeatures(self, categoricalVS, indexOfFeature, categorical_feature_name):
-        vs = VectorSpace_v2  # this class
+        vs = self  # this class
         numerical_feature_names = []
         for row in categoricalVS:
             row_val = row[indexOfFeature].replace(" ", "")
@@ -110,4 +126,4 @@ class VectorSpace_v2:
 
 
 
-VectorSpace_v2()
+VectorSpace_gender()

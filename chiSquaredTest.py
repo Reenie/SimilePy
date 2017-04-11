@@ -6,13 +6,9 @@ import main as main
 import pandas
 import texttable as tt
 
-
 class chiSquaredTest:
     def __init__(self):
         chiSquaredTest.culcAndPrintChiSquereTest('self')
-
-
-
 
     """
     for i in range(1, 11):
@@ -141,7 +137,7 @@ class chiSquaredTest:
         results = []
         p_table_wholeDataset = []
         cc = chiSquaredTest
-        vectorSpace, features = FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn(
+        vectorSpace, features = FileToMatrix.VectorSpace_InWoleDataset_fromSecondColumn_usefulAttr(
             main.filenames)  # we need only the list of features
         feature1_index = -1
         complete_p_table_row_with_zero_index = 0
