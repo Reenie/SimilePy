@@ -17,13 +17,21 @@ from sklearn.linear_model import SGDClassifier
 from sklearn import neighbors
 from sklearn import tree
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.datasets import make_blobs
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.tree import DecisionTreeClassifier
+
 
 #classification and dimensionality reduction
 class classification_gender:
     def __init__(self):
         start = time.time()
         classification_gender.lda_evaluation('self', 2)
-        #classification_gender.lda_plot_2d_3d('self', 3)
+        #classification_gender.lda_plot_2d_3d('self', 2)
+        #classification_gender.classifiers_evaluation('self', 3)
+
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -44,12 +52,13 @@ class classification_gender:
         labels_list = []
         for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
             index += 1
-            #y_pred = cg.lda_classifier(self, x_train, y_train, x_test)
-            y_pred = cg.svm_classifier(self, x_train, y_train, x_test)
+            y_pred = cg.lda_classifier(self, x_train, y_train, x_test)
+            #y_pred = cg.svm_classifier(self, x_train, y_train, x_test)
             #y_pred = cg.sgd_classifier(self, x_train, y_train, x_test)
             #y_pred = cg.kNeighbors_classifier(self, x_train, y_train, x_test, n_neighbors=30)
             #y_pred = cg.DT_classifier(self, x_train, y_train, x_test)
             #y_pred = cg.multiLayerPerceptron_classifier(self, x_train, y_train, x_test)
+            #y_pred = cg.RF_classifier(self, x_train, y_train, x_test)
             t = 0
             f = 0
             for y, y_t in zip(y_pred, y_test):
@@ -84,6 +93,45 @@ class classification_gender:
         tuple = ('\nAvg/Total', round(avg_precision,3),round(avg_recall,3), round(avg_fscore,3), int(round(total_support)))
         print('%-14s%-14s%-14s%-14s%-14s' % tuple)
         print("avg accuracy: " + str(round(np.mean(accuracy),3)))
+
+
+
+    def lda_plot_2d_3d(self, numOfGender):
+        figure_number = 0
+        for i in range(3):
+            figure_number +=2
+            x_train, x_test, y_train, y_test, target_values = classification_gender.readAndSplitData('self', 1)
+            lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
+            x_d2 = lda.fit(x_train, y_train).transform(x_train)
+            colors = ['blue', 'orange', 'green']
+            markers = ['o', 'P', 'X']
+            labels = ["1_M", "2_F", "3_N"]
+            if numOfGender == 2:
+                colors = ['blue', 'orange']
+                markers = ['P', 'X']
+                labels = ["1_M/F", "2_N"]
+            fig = plt.figure(figure_number-1)
+            ax1 = fig.add_subplot(111)
+            for color, i, m in zip(colors, target_values, markers):
+                ax1.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, marker=m, label=labels[int(i)-1])
+            plt.legend(loc='best', shadow=False, scatterpoints=1)
+            plt.title('Gender (2D)')
+            #plt.show()
+            fig2 = plt.figure(figure_number)
+            ax2 = fig2.add_subplot(111, projection='3d')
+            for color, i, m in zip(colors, target_values, markers):
+                ax2.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], x_d2[y_train == i, 2], alpha=.8, c=color,
+                           marker=m, label=labels[int(i)-1])
+                plt.legend(loc='best', shadow=False, scatterpoints=1)
+            plt.title('Gender (3D)')
+            plt.show()
+
+
+
+
+
+
+
 
 
     def lda_classifier(self, x_train, y_train, x_test):
@@ -121,10 +169,18 @@ class classification_gender:
         return y_pred
 
     def multiLayerPerceptron_classifier(self, x_train, y_train, x_test):
-        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(20, 8), random_state=1)
+        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10, 6), random_state=1)
         clf.fit(x_train, y_train)  # .transform(x_train)
         y_pred = clf.predict(x_test)
         return y_pred
+
+    def RF_classifier(self, x_train, y_train, x_test):
+        clf = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, max_features='auto', random_state=0)
+        clf.fit(x_train, y_train)  # .transform(x_train)
+        y_pred = clf.predict(x_test)
+        return y_pred
+
+
 
     #it returns the arrays of the mean value of evaluation metrics and the average of each array
     def meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list):
@@ -182,38 +238,7 @@ class classification_gender:
         return labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support
 
 
-    def lda_plot_2d_3d(self, numOfGender):
-        figure_number = 0
-        for i in range(3):
-            figure_number +=2
-            x_train, x_test, y_train, y_test, target_values = classification_gender.readAndSplitData('self', 1)
-            lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
-            x_d2 = lda.fit(x_train, y_train).transform(x_train)
-            colors = ['blue', 'orange', 'green']
-            markers = ['o', 'P', 'X']
-            labels = ["1_M", "2_F", "3_N"]
-            if numOfGender == 2:
-                colors = ['blue', 'orange']
-                markers = ['P', 'X']
-                labels = ["1_M/F", "2_N"]
-            #clustering.plot_2d_3d("self", i, colors, markers, x_d2, y_train, target_values)
-            fig = plt.figure(figure_number-1)
-            ax1 = fig.add_subplot(111)
-            #print(target_values)
-            for color, i, m in zip(colors, target_values, markers):
-                ax1.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, marker=m, label=labels[int(i)-1])
-                # plt.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, marker=m, label=int(i))
-            plt.legend(loc='best', shadow=False, scatterpoints=1)
-            plt.title('LDA of simile dataset (2D)')
-            #plt.show()
-            fig2 = plt.figure(figure_number)
-            ax2 = fig2.add_subplot(111, projection='3d')
-            for color, i, m in zip(colors, target_values, markers):
-                ax2.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], x_d2[y_train == i, 2], alpha=.8, c=color,
-                           marker=m, label=labels[int(i)-1])
-                plt.legend(loc='best', shadow=False, scatterpoints=1)
-            plt.title('LDA of simile dataset (3D)')
-            plt.show()
+
 
 
 
@@ -274,5 +299,149 @@ class classification_gender:
         y_train = x[:training_len, 0]  #target
         y_test = x[training_len:, 0]   #target
         return x_train, x_test, y_train, y_test, target_values
+
+    def classifiers_evaluation(self, numOfGender):
+        cg = classification_gender
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
+            classification_gender.readAndSplitKFoldsData('self', 10, numOfGender)
+        lda = []
+        x_d2_list = []
+        # for a in range(1):
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.lda_classifier(self, x_train, y_train, x_test)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+            labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        print('%-14s%-14s%-14s%-14s%-14s' % ("Gender", "Precision", "Recall", "F1-score", "Support"))
+        tuple = (
+                '\nLDA', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3),
+                int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.svm_classifier(self, x_train, y_train, x_test)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        tuple = (
+            'SVM', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3), int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.sgd_classifier(self, x_train, y_train, x_test)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        tuple = (
+                'SGD', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3), int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.kNeighbors_classifier(self, x_train, y_train, x_test, n_neighbors=30)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        tuple = (
+                'kNeighbors', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3),
+                int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.DT_classifier(self, x_train, y_train, x_test)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        tuple = (
+                'DT', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3),
+                int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.multiLayerPerceptron_classifier(self, x_train, y_train, x_test)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        tuple = (
+                'MLP', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3),
+                int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+
+        index, precision_list, recall_list, fscore_list, suport_list, labels_list = classification_gender.init('self')
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            index += 1
+            y_pred = cg.RF_classifier(self, x_train, y_train, x_test)
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+                classification_gender.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list,
+                                                  suport_list)
+        tuple = (
+                'RF', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3),
+                int(round(total_support)))
+        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+
+    def init(self):
+        return -1, [], [], [], [], []
+
 
 classification_gender()

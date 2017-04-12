@@ -4,7 +4,7 @@ import main
 
 class VectorSpace_v2:
     def __init__(self):
-        numericalFeature_names, numericalVS = VectorSpace.numericalVectorSpace('self', main.filenames)
+        numericalFeature_names, numericalVS = VectorSpace_v2.numericalVectorSpace('self', main.filenames)
         file = main.dataset_path + "numericalVectorSpace.txt"
         VectorSpace_v2.writeNumericalVSToFile(self, numericalVS, numericalFeature_names, file)
 

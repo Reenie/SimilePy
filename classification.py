@@ -17,8 +17,8 @@ import time
 class classification:
     def __init__(self):
         start = time.time()
-        #clustering.lda_evaluation('self')
-        classification.lda_plot_2d_3d('self')
+        classification.lda_evaluation('self')
+        #classification.lda_plot_2d_3d('self')
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -159,7 +159,7 @@ class classification:
                 ax1.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, marker=m, label=labels[int(i)-1])
                 # plt.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, marker=m, label=int(i))
             plt.legend(loc='best', shadow=False, scatterpoints=1)
-            plt.title('LDA of simile dataset (2D)')
+            plt.title('SIMILE (2D)')
             #plt.show()
             fig2 = plt.figure(figure_number)
             ax2 = fig2.add_subplot(111, projection='3d')
@@ -167,7 +167,7 @@ class classification:
                 ax2.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], x_d2[y_train == i, 2], alpha=.8, c=color,
                            marker=m, label=labels[int(i)-1])
                 plt.legend(loc='best', shadow=False, scatterpoints=1)
-            plt.title('LDA of simile dataset (3D)')
+            plt.title('SIMILE (3D)')
             plt.show()
 
 
