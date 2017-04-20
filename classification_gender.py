@@ -22,14 +22,18 @@ from sklearn.datasets import make_blobs
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.decomposition import TruncatedSVD
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import Normalizer
+
 
 
 #classification and dimensionality reduction
 class classification_gender:
     def __init__(self):
         start = time.time()
-        classification_gender.lda_evaluation('self', 2)
-        #classification_gender.lda_plot_2d_3d('self', 2)
+        #classification_gender.lda_evaluation('self', 2)
+        classification_gender.lda_plot_2d_3d('self', 2)
         #classification_gender.classifiers_evaluation('self', 3)
 
         end = time.time()
@@ -97,12 +101,16 @@ class classification_gender:
 
 
     def lda_plot_2d_3d(self, numOfGender):
+        cg = classification_gender
         figure_number = 0
         for i in range(3):
             figure_number +=2
             x_train, x_test, y_train, y_test, target_values = classification_gender.readAndSplitData('self', 1)
-            lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
-            x_d2 = lda.fit(x_train, y_train).transform(x_train)
+
+            x_d2, x_d3 = cg.LSA('self', x_train)
+            #x_d2, x_d3 = cg.LDA(self, x_train, y_train)
+
+
             colors = ['blue', 'orange', 'green']
             markers = ['o', 'P', 'X']
             labels = ["1_M", "2_F", "3_N"]
@@ -120,13 +128,32 @@ class classification_gender:
             fig2 = plt.figure(figure_number)
             ax2 = fig2.add_subplot(111, projection='3d')
             for color, i, m in zip(colors, target_values, markers):
-                ax2.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], x_d2[y_train == i, 2], alpha=.8, c=color,
+                ax2.scatter(x_d3[y_train == i, 0], x_d3[y_train == i, 1], x_d3[y_train == i, 2], alpha=.8, c=color,
                            marker=m, label=labels[int(i)-1])
                 plt.legend(loc='best', shadow=False, scatterpoints=1)
             plt.title('Gender (3D)')
             plt.show()
 
 
+
+    # Latent Semantic Analysis
+    def LSA(self, x_train):
+            svd = TruncatedSVD(n_components=2)
+            normalizer = Normalizer(copy=False)
+            lsa_d2 = make_pipeline(svd, normalizer)
+            x_d2 = lsa_d2.fit_transform(x_train)
+            svd = TruncatedSVD(n_components=3)
+            lsa_d3 = make_pipeline(svd, normalizer)
+            x_d3 = lsa_d3.fit_transform(x_train)
+            return x_d2, x_d3
+
+    # Linear Discriminant Analysis
+    def LDA(self, x_train, y_train):
+            lda_d2 = LinearDiscriminantAnalysis(solver='svd', n_components=2)
+            x_d2 = lda_d2.fit(x_train, y_train).transform(x_train)
+            lda_d3 = LinearDiscriminantAnalysis(solver='svd', n_components=3)
+            x_d3 = lda_d3.fit(x_train, y_train).transform(x_train)
+            return x_d2, x_d3
 
 
 

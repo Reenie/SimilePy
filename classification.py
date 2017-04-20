@@ -13,12 +13,20 @@ from sklearn.model_selection import KFold
 from sklearn.metrics import classification_report
 import time
 
+from sklearn.decomposition import TruncatedSVD
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import Normalizer
+from sklearn.decomposition import NMF
+from sklearn.decomposition import PCA, IncrementalPCA, KernelPCA
+
+from sklearn.cluster import KMeans, MiniBatchKMeans
+
 #classification and dimensionality reduction
 class classification:
     def __init__(self):
         start = time.time()
-        classification.lda_evaluation('self')
-        #classification.lda_plot_2d_3d('self')
+        #classification.lda_evaluation('self')
+        classification.lda_plot_2d_3d('self')
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -136,13 +144,23 @@ class classification:
         return labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support
 
 
+
+
+
+
     def lda_plot_2d_3d(self):
+        c = classification
         figure_number = 0
         for i in range(3):
             figure_number +=2
             x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
-            lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
-            x_d2 = lda.fit(x_train, y_train).transform(x_train)
+
+            #x_d2, x_d3 = c.LSA(self, x_train)           #Latent Semantic Analysis
+            x_d2, x_d3 = c.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
+            #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
+            #x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
+            #x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
+
             colors = ['magenta', 'turquoise', 'brown',
                   'red', 'black', 'blue',
                   'cyan', 'green', 'orange',
@@ -164,12 +182,62 @@ class classification:
             fig2 = plt.figure(figure_number)
             ax2 = fig2.add_subplot(111, projection='3d')
             for color, i, m in zip(colors, target_values, markers):
-                ax2.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], x_d2[y_train == i, 2], alpha=.8, c=color,
+                ax2.scatter(x_d3[y_train == i, 0], x_d3[y_train == i, 1], x_d3[y_train == i, 2], alpha=.8, c=color,
                            marker=m, label=labels[int(i)-1])
                 plt.legend(loc='best', shadow=False, scatterpoints=1)
             plt.title('SIMILE (3D)')
             plt.show()
 
+
+
+
+
+    #  Kernel Principal component analysis (IPCA)
+    def KPCA(self, x_train):
+            m_d2 = KernelPCA(n_components=2, kernel="rbf", fit_inverse_transform=True, gamma=10)
+            x_d2 = m_d2.fit_transform(x_train)
+            x_d2 = m_d2.inverse_transform(x_d2)
+            m_d3 = KernelPCA(n_components=3, kernel="rbf", fit_inverse_transform=True, gamma=10)
+            x_d3 = m_d3.fit_transform(x_train)
+            x_d3 = m_d3.inverse_transform(x_d3)
+            return x_d2, x_d3
+
+    # Principal component analysis (PCA)
+    def PCA_(self, x_train):
+        m_d2 = PCA(n_components=2, svd_solver='randomized')
+        x_d2 = m_d2.fit_transform(x_train)
+        m_d3 = PCA(n_components=3, svd_solver='randomized')
+        x_d3 = m_d3.fit_transform(x_train)
+        return x_d2, x_d3
+
+
+    #Non-Negative Matrix Factorization
+    def NMF_(self, x_train, y_train):
+        m_d2 = NMF(n_components=2, init='random', random_state=0)
+        x_d2 = m_d2.fit(x_train, y_train).transform(x_train)
+        m_d3 = NMF(n_components=3, init='random', random_state=0)
+        x_d3 = m_d3.fit(x_train, y_train).transform(x_train)
+        return x_d2, x_d3
+
+
+    #Latent Semantic Analysis
+    def LSA(self, x_train):
+        svd = TruncatedSVD(n_components=2)
+        normalizer = Normalizer(copy=False)
+        m_d2 = make_pipeline(svd, normalizer)
+        x_d2 = m_d2.fit_transform(x_train)
+        svd = TruncatedSVD(n_components=3)
+        m_d3 = make_pipeline(svd, normalizer)
+        x_d3 = m_d3.fit_transform(x_train)
+        return x_d2, x_d3
+
+    #Linear Discriminant Analysis
+    def LDA(self, x_train, y_train):
+        lda_d2 = LinearDiscriminantAnalysis(solver='svd', n_components=2)
+        x_d2 = lda_d2.fit(x_train, y_train).transform(x_train)
+        lda_d3 = LinearDiscriminantAnalysis(solver='svd', n_components=3)
+        x_d3 = lda_d3.fit(x_train, y_train).transform(x_train)
+        return x_d2, x_d3
 
 
     #LDA - Linear Discriminant Analysis

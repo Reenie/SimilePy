@@ -7,6 +7,11 @@ lin_statistics_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/Statist
 dataset_path = win_dataset_path
 statistics_path = win_statistics_path
 
+
+
+
+
+
 filenames = ["1_aspros_san_to_pani.txt",
              "2_stolismenos_san_fregata.txt",
              "3_apalos_san_poupoulo.txt",

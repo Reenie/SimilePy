@@ -83,6 +83,7 @@ class VectorSpace:
         #print(numerical_feature_names)
         return numerical_feature_names
 
+
     # it returns array with numerical feature names
     def numericalFeatures(self, categoricalVS, indexOfFeature, categorical_feature_name):
         vs = VectorSpace  # this class
