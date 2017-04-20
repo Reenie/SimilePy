@@ -1,8 +1,9 @@
 from matplotlib import style
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.utils.multiclass import unique_labels
+
+import VectorSpace_v3 as vs3
 import main
-import vectorSpace_v2 as vs2
 style.use("ggplot")
 import numpy as np
 import random
@@ -22,19 +23,23 @@ from sklearn.decomposition import PCA, IncrementalPCA, KernelPCA
 from sklearn.cluster import KMeans, MiniBatchKMeans
 
 #classification and dimensionality reduction
-class classification:
+class Classification_simile:
     def __init__(self):
+        s = Classification_simile #this class
         start = time.time()
-        #classification.lda_evaluation('self')
-        classification.lda_plot_2d_3d('self')
+        s.classifier_evaluation('self')
+        #s.lda_plot_2d_3d('self')
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
+
+
     # LDA - Linear Discriminant Analysis
-    def lda_evaluation(self):
+    def classifier_evaluation(self):
+        s = Classification_simile  # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            classification.readAndSplitKFoldsData('self', 10)
-        lda = []
+            s.readAndSplitKFoldsData('self', 10)
+        classifier = []
         x_d2_list = []
         # for a in range(1):
         index = -1
@@ -45,14 +50,18 @@ class classification:
         suport_list = []
         labels_list = []
         for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            x_train = np.array(x_train)
+            y_train = np.array(y_train)
+            x_test = np.array(x_test)
+            y_test = np.array(y_test)
             index += 1
             l = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=0.3)
             #l = LinearDiscriminantAnalysis(solver='svd', n_components=2)
             #l = LinearDiscriminantAnalysis(solver='eigen', shrinkage=0.2, n_components=2)
-            lda.append(l)
-            x_d2 = lda[index].fit(x_train, y_train)#.transform(x_train)
+            classifier.append(l)
+            x_d2 = classifier[index].fit(x_train[0:, 2:], y_train)#.transform(x_train)
             x_d2_list.append(x_d2)
-            y_pred = lda[index].predict(x_test)
+            y_pred = classifier[index].predict(x_test[0:, 2:])
             # print(y_pred)
             t = 0
             f = 0
@@ -76,7 +85,7 @@ class classification:
             fscore_list.append(fs)
             suport_list.append(sup)
         labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
-            classification.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
+            s.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
         labels = ["1_aspr", "2_stol", "3_apal_p", "4_apal_x", "5_elafr", "6_kokkin", "7_oplism", "8_malak", "9_geros", "10_pist" ]
         print('%-14s%-14s%-14s%-14s%-14s' % ("Simile", "Precision", "Recall", "F1-score", "Support"))
         #labels = labels_list[0]
@@ -149,14 +158,14 @@ class classification:
 
 
     def lda_plot_2d_3d(self):
-        c = classification
+        s = Classification_simile  # this class
         figure_number = 0
         for i in range(3):
             figure_number +=2
-            x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
+            x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
 
             #x_d2, x_d3 = c.LSA(self, x_train)           #Latent Semantic Analysis
-            x_d2, x_d3 = c.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
+            x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
             #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
             #x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
             #x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
@@ -242,7 +251,8 @@ class classification:
 
     #LDA - Linear Discriminant Analysis
     def lda_plot(self):
-        x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
+        s = Classification_simile  # this class
+        x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(n_components=2)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
         colors = ['magenta', 'turquoise', 'brown',
@@ -280,7 +290,8 @@ class classification:
 
     #LDA - Linear Discriminant Analysis
     def lda_plot_3d(self):
-        x_train, x_test, y_train, y_test, target_values = classification.readAndSplitData('self', 1)
+        s = Classification_simile  # this class
+        x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
         colors = ['magenta', 'turquoise', 'brown',
@@ -302,7 +313,8 @@ class classification:
 
     #LDA - Linear Discriminant Analysis
     def lda_kfoldCrossValidation(self):
-        x_train_list, x_test_list, y_train_list, y_test_list, target_values = classification.readAndSplitKFoldsData('self', 10)
+        s = Classification_simile  # this class
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values = s.readAndSplitKFoldsData('self', 10)
         lda = []
         x_d2_list = []
         #for a in range(1):
@@ -344,15 +356,15 @@ class classification:
 
 
     def readAndSplitKFoldsData(self, folds):
-        feature_names, vector_space = vs2.VectorSpace_v2.numericalVectorSpace("self", main.filenames)
-        vector_space = np.array(vector_space)
-        x = vector_space[1:, 0:]
+        feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
+        x = np.array(vector_space)
+        #x = vector_space[1:, 0:]
         np.random.shuffle(x)
         x = x.astype(float)
         #print(x[0:, 0])
         target_values = []
         #for y_target
-        for tn in x[1:, 0]:
+        for tn in x[0:, 0]:
             if not (tn in target_values):
                 target_values.append(tn)
         #print(target_values)
@@ -381,13 +393,13 @@ class classification:
 
 
     def readAndSplitData(self, training_fraction):
-        feature_names, vector_space = vs2.VectorSpace_v2.numericalVectorSpace("self", main.filenames)
-        vector_space = np.array(vector_space)
-        x = vector_space[1:, 0:]
+        feature_names, vector_space = vs3.numericalVectorSpace("self", main.filenames)
+        x = np.array(vector_space)
+        #x = vector_space[0:, 0:]
         x = x.astype(float)
         target_values = []
         #for y_target
-        for tn in x[1:, 0]:
+        for tn in x[0:, 0]:
             if not (tn in target_values):
                 target_values.append(tn)
         #print(target_values)
@@ -402,4 +414,4 @@ class classification:
 
 
 
-classification()
+Classification_simile()

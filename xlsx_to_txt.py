@@ -30,9 +30,9 @@ class XlsxToTxt:
                "GENDER",#3
                "HEAD",#4
                "LEMMA",#5
-               "MOD PRED SEMS",#6   MODIFIED PRED SEMS
-               "TENOR SEM",#7  TENOR SEM GENERALISATION
-               "MWE TYPE",#8
+               "MOD_PRED_SEMS",#6   MODIFIED PRED SEMS
+               "TEN_GEN_SEMS",#7  TENOR SEM GENERALISATION
+               "MWE_TYPE",#8
                "PHENOMENON", #9
                "DETERMINER",#10
                "EMPM",#11
@@ -40,7 +40,7 @@ class XlsxToTxt:
                "IWO",#13
                "IXP-CREATIVE",#14
                "IXP-EXPANSION",#15
-               "IXP-N, IXP-W, IXP-PUNC",#16
+               "IXP-N_W_PUNC",#16
                "MOD",#17
                "AGR",#18
                "MWO",#19
