@@ -1,9 +1,13 @@
+from sklearn import svm
+
 from matplotlib import style
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.utils.multiclass import unique_labels
 
 import VectorSpace_v3 as vs3
 import main
+from Classifiers import Classifiers
+
 style.use("ggplot")
 import numpy as np
 import random
@@ -13,36 +17,135 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import KFold
 from sklearn.metrics import classification_report
 import time
-
 from sklearn.decomposition import TruncatedSVD
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 from sklearn.decomposition import NMF
 from sklearn.decomposition import PCA, IncrementalPCA, KernelPCA
+import pandas
+import numpy
+from sklearn.feature_selection import SelectKBest
+from sklearn.feature_selection import chi2
 
 from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.feature_selection import RFE
+from sklearn.model_selection import StratifiedKFold
+from sklearn.feature_selection import RFECV
+from sklearn.ensemble import ExtraTreesClassifier
+
 
 #classification and dimensionality reduction
 class Classification_simile:
     def __init__(self):
         s = Classification_simile #this class
         start = time.time()
-        s.classifier_evaluation('self')
+        s.classifier_evaluation('self', classifier = 2)
+        #s.evaluateAllClassifiers(self, numOfClassifiers=7)
+        s.UFS_featureSelection(self)
+        #s.RFE_featureSelection(self)
+        #s.TBFS_featureSelection(self)
         #s.lda_plot_2d_3d('self')
+
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
 
 
-    # LDA - Linear Discriminant Analysis
-    def classifier_evaluation(self):
+    #Univariate feature selection
+    # Feature Extraction with Univariate Statistical Tests (Chi-squared for classification)
+    def UFS_featureSelection(self):
+        s = Classification_simile  # this class
+        # load data
+        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
+        #names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+        names = feature_names[3:]
+        #print(names)
+        X = x_train[0:, 2:]
+        Y = y_train
+        # feature extraction
+        test = SelectKBest(score_func=chi2, k=3)
+        fit = test.fit(X, Y)
+        # summarize scores
+        numpy.set_printoptions(precision=3)
+        #print(fit.scores_)
+        features = fit.transform(X)
+        # summarize selected features
+        #print(features[0:, :])
+        #print(len(fit.scores_))
+        #print(len(feature_names))
+        score_attr_tupple = []
+        for a, b in zip(fit.scores_, names):
+            #print(str(a) + " " + b )
+            if np.math.isnan(a):
+                a=0.0
+            score_attr_tupple.append((a, b))
+        score_attr_tupple.sort(key=lambda tup: tup[0], reverse=True)
+        for a in score_attr_tupple:
+            print(str(round(a[0],3)) + " " + str(a[1]))
+
+    # Recursive Feature Elimination works by recursively removing attributes and building a model on those attributes that remain.
+    def RFE_featureSelection(self):
+        s = Classification_simile  # this class
+        # load data
+        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
+        # names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+        names = feature_names[3:]
+        print(names)
+        X = x_train[0:, 2:]
+        Y = y_train
+        # feature extraction
+        model = svm.LinearSVC()
+        rfe = RFECV(estimator=model, step=1, cv=StratifiedKFold(2),
+                      scoring='accuracy')
+        fit = rfe.fit(X, Y)
+        features = fit.n_features_
+        print(features)
+        print(len(fit.ranking_))
+        print(len(feature_names))
+        score_attr_tupple = []
+        for a, b in zip(fit.ranking_, names):
+            # print(str(a) + " " + b )
+            if np.math.isnan(a):
+                a = 0.0
+            score_attr_tupple.append((a, b))
+        score_attr_tupple.sort(key=lambda tup: tup[0], reverse=False)
+        for a in score_attr_tupple:
+            print(str(round(a[0], 3)) + " " + str(a[1]))
+
+    #Tree-based feature selection
+    #Tree - based estimators can be used to compute feature importances, which in turn can be used to discard irrelevant features
+    def TBFS_featureSelection(self):
+        s = Classification_simile  # this class
+        # load data
+        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
+        names = feature_names[3:]
+        print(names)
+        X = x_train[0:, 2:]
+        Y = y_train
+        # feature extraction
+        model = ExtraTreesClassifier()
+        fit = model.fit(X, Y)
+        features = fit.n_features_
+        print(features)
+        print(len(fit.feature_importances_))
+        print(len(names))
+        score_attr_tupple = []
+        for a, b in zip(fit.feature_importances_, names):
+            # print(str(a) + " " + b )
+            if np.math.isnan(a):
+                a = 0.0
+            score_attr_tupple.append((a, b))
+        score_attr_tupple.sort(key=lambda tup: tup[0], reverse=True)
+        for a in score_attr_tupple:
+            print(str(round(a[0], 3)) + " " + str(a[1]))
+
+
+
+        # LDA - Linear Discriminant Analysis
+    def classifier_evaluation(self, classifier=1):
         s = Classification_simile  # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            s.readAndSplitKFoldsData('self', 10)
-        classifier = []
-        x_d2_list = []
-        # for a in range(1):
-        index = -1
+            s.readAndSplitKFoldsData('self', 2)
         accuracy = []
         precision_list = []
         recall_list = []
@@ -50,19 +153,16 @@ class Classification_simile:
         suport_list = []
         labels_list = []
         for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            #print(x_test)
             x_train = np.array(x_train)
             y_train = np.array(y_train)
             x_test = np.array(x_test)
             y_test = np.array(y_test)
-            index += 1
-            l = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=0.3)
-            #l = LinearDiscriminantAnalysis(solver='svd', n_components=2)
-            #l = LinearDiscriminantAnalysis(solver='eigen', shrinkage=0.2, n_components=2)
-            classifier.append(l)
-            x_d2 = classifier[index].fit(x_train[0:, 2:], y_train)#.transform(x_train)
-            x_d2_list.append(x_d2)
-            y_pred = classifier[index].predict(x_test[0:, 2:])
-            # print(y_pred)
+            #print(x_test)
+            print(x_train[0:, 2:].shape)
+            print(y_train.shape)
+            print(x_test[0:, 2:].shape)
+            y_pred = Classifiers.run_classifier(self, x_train[0:, 2:], y_train, x_test[0:, 2:], classifier=classifier)
             t = 0
             f = 0
             for y, y_t in zip(y_pred, y_test):
@@ -95,6 +195,58 @@ class Classification_simile:
         tuple = ('\nAvg/Total', round(avg_precision,3),round(avg_recall,3), round(avg_fscore,3), int(round(total_support)))
         print('%-14s%-14s%-14s%-14s%-14s' % tuple)
         print("avg accuracy: " + str(round(np.mean(accuracy),3)))
+        return avg_fscore
+
+
+
+    def evaluateAllClassifiers(self, numOfClassifiers=8):
+        s = Classification_simile
+        c = Classifiers
+        classifier_prec_rec_fScor = []
+        for i in range(numOfClassifiers):
+            pr, rec, f1 = s.classifier_evaluation_withoutPrint("self", classifier=(i+1))
+            classifier_prec_rec_fScor.append([i+1, pr, rec, f1])
+        print('%-14s%-14s%-14s%-14s' % ("Classifier", "Precision", "Recall", "F1-Score"))
+        for v in classifier_prec_rec_fScor:
+            print('%-14s%-14s%-14s%-14s' % (str(c.classifier_names[v[0]]), str(round(v[1],3)), str(round(v[2],3)), str(round(v[3],3))))
+
+
+
+    def classifier_evaluation_withoutPrint(self, classifier=1):
+        s = Classification_simile  # this class
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
+            s.readAndSplitKFoldsData('self', 10)
+        accuracy = []
+        precision_list = []
+        recall_list = []
+        fscore_list = []
+        suport_list = []
+        labels_list = []
+        for x_train, y_train, x_test, y_test in zip(x_train_list, y_train_list, x_test_list, y_test_list):
+            x_train = np.array(x_train)
+            y_train = np.array(y_train)
+            x_test = np.array(x_test)
+            y_test = np.array(y_test)
+            y_pred = Classifiers.run_classifier(self, x_train[0:, 2:], y_train, x_test[0:, 2:], classifier=classifier)
+            t = 0
+            f = 0
+            for y, y_t in zip(y_pred, y_test):
+                if (y == y_t):
+                    t += 1
+                else:
+                    f += 1
+            accuracy.append(t / (t + f))
+            labels = unique_labels(y_test, y_pred)
+            labels_list.append(labels)
+            # print(labels)
+            pr, rec, fs, sup = precision_recall_fscore_support(y_test, y_pred)
+            precision_list.append(pr)
+            recall_list.append(rec)
+            fscore_list.append(fs)
+            suport_list.append(sup)
+        labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
+            s.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
+        return avg_precision, avg_recall, avg_fscore
 
 
     #it returns the arrays of the mean value of evaluation metrics and the average of each array
@@ -163,13 +315,11 @@ class Classification_simile:
         for i in range(3):
             figure_number +=2
             x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
-
             #x_d2, x_d3 = c.LSA(self, x_train)           #Latent Semantic Analysis
             x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
             #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
             #x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
             #x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
-
             colors = ['magenta', 'turquoise', 'brown',
                   'red', 'black', 'blue',
                   'cyan', 'green', 'orange',
@@ -393,7 +543,7 @@ class Classification_simile:
 
 
     def readAndSplitData(self, training_fraction):
-        feature_names, vector_space = vs3.numericalVectorSpace("self", main.filenames)
+        feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
         x = np.array(vector_space)
         #x = vector_space[0:, 0:]
         x = x.astype(float)
@@ -410,7 +560,7 @@ class Classification_simile:
         x_test = x[training_len:, 1:]
         y_train = x[:training_len, 0]  #target
         y_test = x[training_len:, 0]   #target
-        return x_train, x_test, y_train, y_test, target_values
+        return x_train, x_test, y_train, y_test, target_values, feature_names
 
 
 

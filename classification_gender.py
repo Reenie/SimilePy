@@ -156,11 +156,6 @@ class classification_gender:
             return x_d2, x_d3
 
 
-
-
-
-
-
     def lda_classifier(self, x_train, y_train, x_test):
        lda = LinearDiscriminantAnalysis(solver='lsqr', shrinkage=0.5)
        # l = LinearDiscriminantAnalysis(solver='svd', n_components=2)

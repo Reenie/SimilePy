@@ -2,9 +2,16 @@ import main
 
 
 class VectorSpace_v3:
-    attrForVectorSpace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    attrForVectorSpace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #all atributes
     attrWithMultipleCategoricalValues = [3, 4, 5, 12] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
+
+          #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
+    some_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
+
+
+    attrForVectorSpace = full_attr #it should be changed
 
     txtHeaders = ["SIMILE", #0
                   "XLSX_ROW", #1
@@ -96,10 +103,10 @@ class VectorSpace_v3:
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
             numericalVS.append(numerical_row)
-        print(numericalFeature_names)
+        #print(numericalFeature_names)
         #print("\n")
-        print(numericalVS)
-        print("Number of features: " +str(len(numericalFeature_names)))
+        #print(numericalVS)
+        #print("Number of features: " +str(len(numericalFeature_names)))
         return numericalFeature_names, numericalVS
 
 
@@ -142,6 +149,18 @@ class VectorSpace_v3:
                 if not (val in values):
                     values.append(val)
         return values
+
+    #matrix transposition
+    def rowToColTransposition(self, m):
+        rows = len(m)  # rows
+        cols = len(m[0])  # columns
+        mT = []
+        for c in range(0, cols):
+            mT.append([])
+            for r in range(0, rows):
+                mT[c].append(m[r][c])
+        return mT
+
 
 
 VectorSpace_v3()
