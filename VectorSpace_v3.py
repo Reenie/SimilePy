@@ -8,8 +8,8 @@ class VectorSpace_v3:
 
           #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
-    some_attr = [0, 1, 2, 3,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
-    numOfGenders = 3 #it should be changed to 3 or 2
+    some_attr = [0, 1, 2, 3,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
+    numOfGenders = 2 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
 
@@ -112,10 +112,10 @@ class VectorSpace_v3:
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
             numericalVS.append(numerical_row)
-        print(numericalFeature_names)
+        #print(numericalFeature_names)
         #print("\n")
         #print(numericalVS)
-        print("Number of features: " +str(len(numericalFeature_names)))
+        #print("Number of features: " +str(len(numericalFeature_names)))
         return numericalFeature_names, numericalVS
 
 

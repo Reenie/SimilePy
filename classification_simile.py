@@ -40,9 +40,9 @@ class Classification_simile:
     def __init__(self):
         s = Classification_simile #this class
         start = time.time()
-        s.classifier_evaluation('self', classifier = 2)
+        #s.classifier_evaluation('self', classifier = 2)
         #s.evaluateAllClassifiers(self, numOfClassifiers=7)
-        #s.UFS_featureSelection(self)
+        s.UFS_featureSelection(self, 25)
         #s.RFE_featureSelection(self)
         #s.TBFS_featureSelection(self)
         #s.lda_plot_2d_3d('self')
@@ -53,7 +53,7 @@ class Classification_simile:
 
     #Univariate feature selection
     # Feature Extraction with Univariate Statistical Tests (Chi-squared for classification)
-    def UFS_featureSelection(self):
+    def UFS_featureSelection(self, kbest=1000):
         s = Classification_simile  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
@@ -76,14 +76,26 @@ class Classification_simile:
         #print(len(fit.scores_))
         #print(len(feature_names))
         score_attr_tupple = []
-        for a, b in zip(fit.scores_, names):
-            #print(str(a) + " " + b )
-            if np.math.isnan(a):
-                a=0.0
-            score_attr_tupple.append((a, b))
-        score_attr_tupple.sort(key=lambda tup: tup[0], reverse=True)
-        for a in score_attr_tupple:
-            print(str(round(a[0], 3)) + " " + str(a[1]))
+        for n, sc, p in zip(names, fit.scores_, fit.pvalues_):
+            # print(str(a) + " " + b )
+            if np.math.isnan(sc):
+                sc = 0.0
+            score_attr_tupple.append((n, sc, p))
+        score_attr_tupple.sort(key=lambda tup: tup[1], reverse=True)
+        # str_for_printing = "Univariate feature selection (best " + str(kbest) + " features):\n"
+        count_best = 0
+        print("Univariate feature selection (best " + str(kbest) + " features):\n")
+        print("%-14s%-14s" % ("Attribute", "Score"))
+        for t in score_attr_tupple:
+            # print("%-14s%-14s" % (str(a[2]), str(round(a[0], 3))))
+            print(str(t[0]) + ", " + str(round(t[1], 3)))
+            # print(str(t[0]) +", "  + str(round(t[1], 3)) + ", "+ str(round(t[2],15)) + ", " +  str(t[1]/t[2]))
+            # str_for_printing += "(" + str(a[2]) + ", " + str(a[1]) + ", " + str(round(a[0], 3)) + "),  "
+            count_best += 1
+            if kbest == count_best:
+                break
+                # print(str_for_printing)
+                #    print(str(round(a[0],3)) + " " + str(a[1]))
 
 
 
