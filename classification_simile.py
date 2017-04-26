@@ -39,11 +39,11 @@ class Classification_simile:
     def __init__(self):
         s = Classification_simile #this class
         start = time.time()
-        s.classifier_evaluation('self', classifier = 2)
+        #s.classifier_evaluation('self', classifier = 2)
         #s.evaluateAllClassifiers(self, numOfClassifiers=7)
-        s.UFS_featureSelection(self)
-        #s.RFE_featureSelection(self)
-        #s.TBFS_featureSelection(self)
+        s.UFS_featureSelection(self, kbest=25) #Univariate feature selection
+        #s.TBFS_featureSelection(self, kbest=20) #Tree-based feature selection
+        #s.RFE_featureSelection(self) # Recursive Feature Elimination
         #s.lda_plot_2d_3d('self')
 
         end = time.time()
@@ -53,7 +53,7 @@ class Classification_simile:
 
     #Univariate feature selection
     # Feature Extraction with Univariate Statistical Tests (Chi-squared for classification)
-    def UFS_featureSelection(self):
+    def UFS_featureSelection(self, kbest=1000):
         s = Classification_simile  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
@@ -63,7 +63,7 @@ class Classification_simile:
         X = x_train[0:, 2:]
         Y = y_train
         # feature extraction
-        test = SelectKBest(score_func=chi2, k=3)
+        test = SelectKBest(score_func=chi2, k="all")
         fit = test.fit(X, Y)
         # summarize scores
         numpy.set_printoptions(precision=3)
@@ -74,14 +74,26 @@ class Classification_simile:
         #print(len(fit.scores_))
         #print(len(feature_names))
         score_attr_tupple = []
-        for a, b in zip(fit.scores_, names):
+        for n, sc, p in zip(names, fit.scores_, fit.pvalues_):
             #print(str(a) + " " + b )
-            if np.math.isnan(a):
-                a=0.0
-            score_attr_tupple.append((a, b))
-        score_attr_tupple.sort(key=lambda tup: tup[0], reverse=True)
-        for a in score_attr_tupple:
-            print(str(round(a[0],3)) + " " + str(a[1]))
+            if np.math.isnan(sc):
+                sc=0.0
+            score_attr_tupple.append((n, sc, p))
+        score_attr_tupple.sort(key=lambda tup: tup[1], reverse=True)
+        #str_for_printing = "Univariate feature selection (best " + str(kbest) + " features):\n"
+        count_best = 0
+        print("Univariate feature selection (best " + str(kbest) + " features):\n")
+        print("%-14s%-14s" %("Attribute", "Score"))
+        for t in score_attr_tupple:
+            #print("%-14s%-14s" % (str(a[2]), str(round(a[0], 3))))
+            print(str(t[0]) + ", " + str(round(t[1], 3))  )
+            #print(str(t[0]) +", "  + str(round(t[1], 3)) + ", "+ str(round(t[2],15)) + ", " +  str(t[1]/t[2]))
+            #str_for_printing += "(" + str(a[2]) + ", " + str(a[1]) + ", " + str(round(a[0], 3)) + "),  "
+            count_best += 1
+            if kbest == count_best:
+                break
+        #print(str_for_printing)
+        #    print(str(round(a[0],3)) + " " + str(a[1]))
 
     # Recursive Feature Elimination works by recursively removing attributes and building a model on those attributes that remain.
     def RFE_featureSelection(self):
@@ -109,12 +121,13 @@ class Classification_simile:
                 a = 0.0
             score_attr_tupple.append((a, b))
         score_attr_tupple.sort(key=lambda tup: tup[0], reverse=False)
-        for a in score_attr_tupple:
-            print(str(round(a[0], 3)) + " " + str(a[1]))
+        print(score_attr_tupple)
+        #for a in score_attr_tupple:
+        #    print(str(round(a[0], 3)) + " " + str(a[1]))
 
     #Tree-based feature selection
     #Tree - based estimators can be used to compute feature importances, which in turn can be used to discard irrelevant features
-    def TBFS_featureSelection(self):
+    def TBFS_featureSelection(self, kbest=1000):
         s = Classification_simile  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
@@ -136,8 +149,15 @@ class Classification_simile:
                 a = 0.0
             score_attr_tupple.append((a, b))
         score_attr_tupple.sort(key=lambda tup: tup[0], reverse=True)
+        str_for_printing = "Tree-based feature selection (best " + str(kbest) + " features):\n"
+        count_best = 0
         for a in score_attr_tupple:
-            print(str(round(a[0], 3)) + " " + str(a[1]))
+            str_for_printing += "(" + str(a[1]) + ", " + str(round(a[0], 3)) + "),  "
+            count_best += 1
+            if kbest == count_best:
+                break
+        print(str_for_printing)
+        #    print(str(round(a[0],3)) + " " + str(a[1]))
 
 
 
@@ -314,12 +334,13 @@ class Classification_simile:
         figure_number = 0
         for i in range(3):
             figure_number +=2
-            x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
-            #x_d2, x_d3 = c.LSA(self, x_train)           #Latent Semantic Analysis
-            x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
-            #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
-            #x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
-            #x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
+            x_train, x_test, y_train, y_test, target_values, _ = s.readAndSplitData(self, 1)
+            x_train = np.array(x_train)
+            #x_d2, x_d3 = c.LSA(self, x_train[0:, 2:])           #Latent Semantic Analysis
+            x_d2, x_d3 = s.LDA(self, x_train[0:, 2:], y_train)  #Linear Discriminant Analysis
+            #x_d2, x_d3 = c.NMF_(self, x_train[0:, 2:], y_train) # Non-Negative Matrix Factorization
+            #x_d2, x_d3 = c.PCA_(self, x_train[0:, 2:])           #principal component analysis (PCA)
+            #x_d2, x_d3 = c.KPCA(self, x_train[0:, 2:])           # Kernel principal component analysis (KPCA)
             colors = ['magenta', 'turquoise', 'brown',
                   'red', 'black', 'blue',
                   'cyan', 'green', 'orange',
