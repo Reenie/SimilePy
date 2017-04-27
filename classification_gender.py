@@ -39,6 +39,8 @@ class classification_gender:
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
+
+
     # LDA - Linear Discriminant Analysis
     def lda_evaluation(self, numOfGender):
         cg = classification_gender
@@ -97,6 +99,8 @@ class classification_gender:
         tuple = ('\nAvg/Total', round(avg_precision,3),round(avg_recall,3), round(avg_fscore,3), int(round(total_support)))
         print('%-14s%-14s%-14s%-14s%-14s' % tuple)
         print("avg accuracy: " + str(round(np.mean(accuracy),3)))
+
+
 
 
 
@@ -258,9 +262,6 @@ class classification_gender:
         avg_recall = avg_recall/total_support
         avg_fscore = avg_fscore/total_support
         return labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support
-
-
-
 
 
 
@@ -460,6 +461,8 @@ class classification_gender:
                 'RF', round(avg_precision, 3), round(avg_recall, 3), round(avg_fscore, 3),
                 int(round(total_support)))
         print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+
+
 
 
     def init(self):

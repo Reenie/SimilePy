@@ -33,21 +33,19 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.feature_selection import RFECV
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn import preprocessing
-from IPython.display import Image
 
 
 #classification and dimensionality reduction
-class Classification_simile:
+class Classification_tenor:
     def __init__(self):
-        s = Classification_simile #this class
+        s = Classification_tenor #this class
         start = time.time()
         #s.classifier_evaluation('self', classifier = 2)
         #s.evaluateAllClassifiers(self, numOfClassifiers=7)
-        #s.UFS_featureSelection(self, 25)
+        s.UFS_featureSelection(self, 25)
         #s.RFE_featureSelection(self)
         #s.TBFS_featureSelection(self)
         #s.lda_plot_2d_3d('self')
-        s.printDecitionTree(self)
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -56,10 +54,9 @@ class Classification_simile:
     #Univariate feature selection
     # Feature Extraction with Univariate Statistical Tests (Chi-squared for classification)
     def UFS_featureSelection(self, kbest=1000):
-        s = Classification_simile  # this class
+        s = Classification_tenor # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
-
         names = feature_names[3:]
         #print(names)
         X = x_train[0:, 2:]
@@ -103,7 +100,7 @@ class Classification_simile:
 
     # Recursive Feature Elimination works by recursively removing attributes and building a model on those attributes that remain.
     def RFE_featureSelection(self):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
         names = feature_names[3:]
@@ -134,7 +131,7 @@ class Classification_simile:
     #Tree-based feature selection
     #Tree - based estimators can be used to compute feature importances, which in turn can be used to discard irrelevant features
     def TBFS_featureSelection(self, kbest=1000):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
         names = feature_names[3:]
@@ -172,7 +169,7 @@ class Classification_simile:
 
         # LDA - Linear Discriminant Analysis
     def classifier_evaluation(self, classifier=1):
-        s = Classification_simile  # this class
+        s = Classification_tenor # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
             s.readAndSplitKFoldsData('self', 2)
         accuracy = []
@@ -233,7 +230,7 @@ class Classification_simile:
 
 
     def evaluateAllClassifiers(self, numOfClassifiers=8):
-        s = Classification_simile
+        s = Classification_tenor
         c = Classifiers
         classifier_prec_rec_fScor = []
         for i in range(numOfClassifiers):
@@ -243,20 +240,10 @@ class Classification_simile:
         for v in classifier_prec_rec_fScor:
             print('%-14s%-14s%-14s%-14s' % (str(c.classifier_names[v[0]]), str(round(v[1],3)), str(round(v[2],3)), str(round(v[3],3))))
 
-    def printDecitionTree(self):
-        s = Classification_simile  # this class
-        c = Classifiers
-        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
-        c.DT_classifier_printTree("self", x_train[:, 2:], y_train, feature_names[3:], target_values)
-        #x = np.array(x_train[:, 2:])
-        #y = np.array(feature_names[3:])
-        #print(x.shape)
-        #print(y.shape)
-
 
 
     def classifier_evaluation_withoutPrint(self, classifier=1):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
             s.readAndSplitKFoldsData('self', 10)
         accuracy = []
@@ -353,7 +340,7 @@ class Classification_simile:
 
 
     def lda_plot_2d_3d(self):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         figure_number = 0
         for i in range(3):
             figure_number +=2
@@ -444,7 +431,7 @@ class Classification_simile:
 
     #LDA - Linear Discriminant Analysis
     def lda_plot(self):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(n_components=2)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
@@ -483,7 +470,7 @@ class Classification_simile:
 
     #LDA - Linear Discriminant Analysis
     def lda_plot_3d(self):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
         lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
@@ -506,7 +493,7 @@ class Classification_simile:
 
     #LDA - Linear Discriminant Analysis
     def lda_kfoldCrossValidation(self):
-        s = Classification_simile  # this class
+        s = Classification_tenor  # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = s.readAndSplitKFoldsData('self', 10)
         lda = []
         x_d2_list = []
@@ -607,4 +594,4 @@ class Classification_simile:
 
 
 
-Classification_simile()
+Classification_tenor()

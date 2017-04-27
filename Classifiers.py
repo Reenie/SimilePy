@@ -4,6 +4,10 @@ from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis, LinearD
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import SGDClassifier
 from sklearn.neural_network import MLPClassifier
+from IPython.display import Image
+import pydotplus
+
+import main
 
 
 class Classifiers:
@@ -94,6 +98,31 @@ class Classifiers:
         clf.fit(x_train, y_train)  # .transform(x_train)
         y_pred = clf.predict(x_test)
         return y_pred
+
+    #Print Decision Tree
+    def DT_classifier_printTree(self, x_train, y_train, feature_names, target_values):
+        clf = tree.DecisionTreeClassifier()
+        clf.fit(x_train, y_train)  # .transform(x_train)
+        target_names = []
+        for n in target_values:
+            target_names.append(str(int(n)))
+        print(feature_names)
+        #print(target_names)
+        #print(x_train)
+        dot_data = tree.export_graphviz(clf, out_file=None,
+                         feature_names=feature_names,
+                         class_names=target_names,
+                         filled=True, rounded=True,
+                         special_characters=True)
+        #with open("dt.dot", 'a') as f:
+        #    f = tree.export_graphviz(clf, out_file=f)
+        #dot_data = tree.export_graphviz(clf, out_file=None)
+        dot_data = tree.export_graphviz(clf, out_file=None, feature_names=feature_names)
+        graph = pydotplus.graph_from_dot_data(dot_data)
+        graph.write_pdf("DT.pdf")
+        graph = pydotplus.graph_from_dot_data(dot_data)
+        Image(graph.create_png())
+
 
     #7
     def multiLayerPerceptron_classifier(self, x_train, y_train, x_test):

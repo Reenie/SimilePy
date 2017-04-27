@@ -3,12 +3,12 @@ import main
 
 class VectorSpace_v3:
     attrForVectorSpace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #all atributes
-    attrWithMultipleCategoricalValues = [3, 4, 5, 12] #numerical vector space has one feature for each categorical value
-    attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
+    attrWithMultipleCategoricalValues = [3, 4, 12] #numerical vector space has one feature for each categorical value
+    attrWithNumericalValues = [0, 1, 2, 5]  #numerical feature has the same value as the catigorical one
 
           #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
-    some_attr = [0, 1, 2, 3,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
+    some_attr = [0, 1, 2, 3,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
     numOfGenders = 3 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
@@ -67,6 +67,9 @@ class VectorSpace_v3:
         #print(matrix)
         return matrix, feature_names
 
+
+
+
     def numericalVectorSpace(self, filenames, gender=numOfGenders):
         s = VectorSpace_v3 #This class
         categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVecotrSpace=s.attrForVectorSpace)
@@ -101,27 +104,26 @@ class VectorSpace_v3:
                         numerical_feature_name = "L_" + c.strip() #replace(" ", "")
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
-                elif categoricalFeature_names[col_index] == "TEN_GEN_SEMS":
-                    if c.replace(" ", "") != "normal":
-                        numerical_feature_name = "T_" + c.strip() #replace(" ", "")
-                        index = numericalFeature_names.index(numerical_feature_name)
-                        numerical_row[index] = 1
+                #elif categoricalFeature_names[col_index] == "TEN_GEN_SEMS":
+                #    if c.replace(" ", "") != "normal":
+                #        numerical_feature_name = "T_" + c.strip() #replace(" ", "")
+                #        index = numericalFeature_names.index(numerical_feature_name)
+                #        numerical_row[index] = 1
                 else:
                     if c.replace(" ", "") != "normal":
                         numerical_feature_name = c.replace(" ", "")
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
             numericalVS.append(numerical_row)
-        #print(numericalFeature_names)
-        #print("\n")
-        #print(numericalVS)
-        #print("Number of features: " +str(len(numericalFeature_names)))
+        print(numericalFeature_names)
+        print("\n")
+        print(numericalVS)
+        print("Number of features: " + str(len(numericalFeature_names)))
         return numericalFeature_names, numericalVS
 
 
 
-        # it returns an array with numerical feature names
-
+    #it returns an array with numerical feature names
     def numFeatureNames(self, categoricalVS, categoricalFeature_names, attrForVectorSpace, gender=3):
         s = VectorSpace_v3 #this class
         numerical_feature_names = []
@@ -140,8 +142,9 @@ class VectorSpace_v3:
         return numerical_feature_names
 
 
-        # it returns array with numerical feature names of a specific categorical feature
 
+
+    # it returns array with numerical feature names of a specific categorical feature
     def numericalValuesOfFeature(self, categoricalVS, indexOfFeature, categorical_feature_name, gender=3):
         s = VectorSpace_v3  # this class
         values = []
@@ -152,7 +155,7 @@ class VectorSpace_v3:
                 if categorical_feature_name == "LEMMA":
                     val = "L_" + row_val
                 elif categorical_feature_name == "TEN_GEN_SEMS":
-                    val = "T_" + row_val
+                    val = "TEN_GEN_SEMS"
                 elif categorical_feature_name == "GENDER" and gender==2:
                     if row_val == "N":
                         val = "N"
@@ -165,6 +168,8 @@ class VectorSpace_v3:
                 if not (val in values):
                     values.append(val)
         return values
+
+
 
     #matrix transposition
     def rowToColTransposition(self, m):
