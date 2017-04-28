@@ -124,15 +124,15 @@ class Classifiers:
         Image(graph.create_png())
 
 
-    #7
+    #8
     def multiLayerPerceptron_classifier(self, x_train, y_train, x_test):
-        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(100,), random_state=1)
+        clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(200,), random_state=1)
         clf.fit(x_train, y_train)  # .transform(x_train)
         y_pred = clf.predict(x_test)
         return y_pred
 
 
-    #8 Random forest
+    #7 Random forest
     def RF_classifier(self, x_train, y_train, x_test):
         clf = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, max_features='auto', random_state=0)
         clf.fit(x_train, y_train)  # .transform(x_train)

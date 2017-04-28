@@ -4,7 +4,8 @@ from matplotlib import style
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.utils.multiclass import unique_labels
 
-import VectorSpace_v3 as vs3
+import VectorSpace_tenor
+import VectorSpace_tenor as vs_tenor
 import main
 from Classifiers import Classifiers
 
@@ -40,14 +41,16 @@ class Classification_tenor:
     def __init__(self):
         s = Classification_tenor #this class
         start = time.time()
-        #s.classifier_evaluation('self', classifier = 2)
-        #s.evaluateAllClassifiers(self, numOfClassifiers=7)
-        s.UFS_featureSelection(self, 25)
+        s.classifier_evaluation('self', classifier = 8)
+        #s.evaluateAllClassifiers(self, numOfClassifiers=8)
+        #s.UFS_featureSelection(self, 25)
         #s.RFE_featureSelection(self)
         #s.TBFS_featureSelection(self)
         #s.lda_plot_2d_3d('self')
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
+
+
 
 
 
@@ -57,9 +60,9 @@ class Classification_tenor:
         s = Classification_tenor # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
-        names = feature_names[3:]
+        names = feature_names[4:]
         #print(names)
-        X = x_train[0:, 2:]
+        X = x_train[0:, 3:]
         Y = y_train
         # feature extraction
         test = SelectKBest(score_func=chi2, k='all')
@@ -103,9 +106,9 @@ class Classification_tenor:
         s = Classification_tenor  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
-        names = feature_names[3:]
+        names = feature_names[4:]
         print(names)
-        X = x_train[0:, 2:]
+        X = x_train[0:, 3:]
         Y = y_train
         # feature extraction
         model = svm.LinearSVC()
@@ -134,9 +137,9 @@ class Classification_tenor:
         s = Classification_tenor  # this class
         # load data
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
-        names = feature_names[3:]
+        names = feature_names[4:]
         print(names)
-        X = x_train[0:, 2:]
+        X = x_train[0:, 3:]
         Y = y_train
         # feature extraction
         model = ExtraTreesClassifier()
@@ -171,7 +174,7 @@ class Classification_tenor:
     def classifier_evaluation(self, classifier=1):
         s = Classification_tenor # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            s.readAndSplitKFoldsData('self', 2)
+            s.readAndSplitKFoldsData('self', 10)
         accuracy = []
         precision_list = []
         recall_list = []
@@ -189,10 +192,10 @@ class Classification_tenor:
             #x_train = preprocessing.scale(x_train)
             #x_test = preprocessing.scale(x_test)
             #print(x_test)
-            print(x_train[0:, 2:].shape)
+            print(x_train[0:, 3:].shape)
             print(y_train.shape)
-            print(x_test[0:, 2:].shape)
-            y_pred = Classifiers.run_classifier(self, x_train[0:, 2:], y_train, x_test[0:, 2:], classifier=classifier)
+            print(x_test[0:, 3:].shape)
+            y_pred = Classifiers.run_classifier(self, x_train[0:, 3:], y_train, x_test[0:, 3:], classifier=classifier)
             t = 0
             f = 0
             for y, y_t in zip(y_pred, y_test):
@@ -216,8 +219,9 @@ class Classification_tenor:
             suport_list.append(sup)
         labels, precision, recall, fscore, support, avg_precision, avg_recall, avg_fscore, total_support = \
             s.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
-        labels = ["1_aspr", "2_stol", "3_apal_p", "4_apal_x", "5_elafr", "6_kokkin", "7_oplism", "8_malak", "9_geros", "10_pist" ]
-        print('%-14s%-14s%-14s%-14s%-14s' % ("Simile", "Precision", "Recall", "F1-score", "Support"))
+        #labels = ["1_aspr", "2_stol", "3_apal_p", "4_apal_x", "5_elafr", "6_kokkin", "7_oplism", "8_malak", "9_geros", "10_pist" ]
+        labels = vs_tenor.VectorSpace_tenor.tenorValues
+        print('%-14s%-14s%-14s%-14s%-14s' % ("Tenor", "Precision", "Recall", "F1-score", "Support"))
         #labels = labels_list[0]
         for l, p, r, f, s in zip(labels, precision, recall, fscore, support):
             tuple = (l, round(p, 3), round(r, 3), round(f, 3), int(round(s)))
@@ -259,7 +263,7 @@ class Classification_tenor:
             y_test = np.array(y_test)
             #preprocessing.normalize(x_train, norm='l2')
             #preprocessing.normalize(x_test, norm='l2')
-            y_pred = Classifiers.run_classifier(self, x_train[0:, 2:], y_train, x_test[0:, 2:], classifier=classifier)
+            y_pred = Classifiers.run_classifier("self", x_train[0:, 3:], y_train, x_test[0:, 3:], classifier=classifier)
             t = 0
             f = 0
             for y, y_t in zip(y_pred, y_test):
@@ -302,7 +306,7 @@ class Classification_tenor:
             count.append(0)
         for labels, pr, re, fs, su in zip(labels_list, precision_list, recall_list, fscore_list, suport_list):
             for l, p, r, f, s in zip(labels, pr, re, fs, su):
-                i = int(l)-1
+                i = vs_tenor.VectorSpace_tenor.tenorValues.index(l)
                 count[i] += 1
                 precision[i] += p*s
                 recall[i] += r*s
@@ -432,7 +436,7 @@ class Classification_tenor:
     #LDA - Linear Discriminant Analysis
     def lda_plot(self):
         s = Classification_tenor  # this class
-        x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
+        x_train, x_test, y_train, y_test, target_values = s.readAndSplitData(self, 1)
         lda = LinearDiscriminantAnalysis(n_components=2)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
         colors = ['magenta', 'turquoise', 'brown',
@@ -471,7 +475,7 @@ class Classification_tenor:
     #LDA - Linear Discriminant Analysis
     def lda_plot_3d(self):
         s = Classification_tenor  # this class
-        x_train, x_test, y_train, y_test, target_values = s.readAndSplitData('self', 1)
+        x_train, x_test, y_train, y_test, target_values = s.readAndSplitData(self, 1)
         lda = LinearDiscriminantAnalysis(solver='svd', n_components=3)
         X_r2 = lda.fit(x_train, y_train).transform(x_train)
         colors = ['magenta', 'turquoise', 'brown',
@@ -536,12 +540,14 @@ class Classification_tenor:
 
 
     def readAndSplitKFoldsData(self, folds):
-        feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
+        s = Classification_tenor
+        feature_names_, vector_space_ = vs_tenor.VectorSpace_tenor.numericalVectorSpace("self", main.filenames)
+        vector_space, feature_names = s.combineTargetValues(self, vectorspace=vector_space_, featurenames=feature_names_)
         x = np.array(vector_space)
         #x = vector_space[1:, 0:]
         np.random.shuffle(x)
-        x = x.astype(float)
-        #print(x[0:, 0])
+        #x = x.astype(float)
+        print(x[0:, 0])
         target_values = []
         #for y_target
         for tn in x[0:, 0]:
@@ -559,6 +565,8 @@ class Classification_tenor:
             for i in train:
                 x_t.append(x[i, 1:])
                 y_t.append(x[i, 0])
+            x_t = np.array(x_t)
+            x_t = x_t.astype(float)
             x_train_list.append(x_t)
             y_train_list.append(y_t)  #target
             x_t = []
@@ -566,17 +574,63 @@ class Classification_tenor:
             for i in test:
                 x_t.append(x[i, 1:])
                 y_t.append(x[i, 0])
+            x_t = np.array(x_t)
+            x_t = x_t.astype(float)
             x_test_list.append(x_t)
             y_test_list.append(y_t)  #target
         return x_train_list, x_test_list, y_train_list, y_test_list, target_values
 
 
 
+
+
+
+    #It reduces the classes of Tenor generalized sematincs
+    def combineTargetValues(self, vectorspace=[], featurenames=[]):
+        s = Classification_tenor
+        index = featurenames.index("TEN_GEN_SEMS")
+        newVectorSpace = []
+        tenor_values = vs_tenor.VectorSpace_tenor.tenorValues
+        for row in vectorspace:
+            if row[index] not in tenor_values:
+                row[index] = "other"
+            new_row = []
+            new_row.append(row[index])
+            #newFeatureNames.append("TEN_GEN_SEMS")
+            row_index=-1
+            for r in row:
+                row_index += 1
+                if row_index != index:
+                    new_row.append(r)
+            newVectorSpace.append(new_row)
+        newFeatureNames = []
+        newFeatureNames.append("TEN_GEN_SEMS")
+        row_index = -1
+        for fn in featurenames:
+            row_index += 1
+            if row_index != index:
+                newFeatureNames.append(fn)
+        #print(newFeatureNames)
+        #print(newVectorSpace)
+        ####################3
+        #newFeatureNames = np.array(newFeatureNames)
+        #newVectorSpace = np.array(newVectorSpace)
+        #print(newFeatureNames.shape)
+        #print(newVectorSpace.shape)
+        return newVectorSpace, newFeatureNames
+
+
+
+
+
+
     def readAndSplitData(self, training_fraction):
-        feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
-        x = np.array(vector_space)
+        s = Classification_tenor
+        feature_names, vector_space = vs_tenor.VectorSpace_tenor.numericalVectorSpace("self", main.filenames)
+        newVector_space, newFeature_names = s.combineTargetValues(self, vectorspace=vector_space, featurenames=feature_names)
+        x = np.array(newVector_space)
         #x = vector_space[0:, 0:]
-        x = x.astype(float)
+        #x = x.astype(float)
         target_values = []
         #for y_target
         for tn in x[0:, 0]:
@@ -588,9 +642,11 @@ class Classification_tenor:
         training_len = int(l*training_fraction)
         x_train = x[:training_len, 1:]
         x_test = x[training_len:, 1:]
+        x_train = x_train.astype(float)
+        x_test = x_test.astype(float)
         y_train = x[:training_len, 0]  #target
         y_test = x[training_len:, 0]   #target
-        return x_train, x_test, y_train, y_test, target_values, feature_names
+        return x_train, x_test, y_train, y_test, target_values, newFeature_names
 
 
 

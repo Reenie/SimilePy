@@ -8,7 +8,7 @@ class VectorSpace_v3:
 
           #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
-    some_attr = [0, 1, 2, 3,  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
+    some_attr = [0, 1, 2, 3,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
     numOfGenders = 3 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
