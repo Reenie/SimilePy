@@ -7,9 +7,10 @@ class VectorSpace_tenor:
     attrWithNumericalValues = [0, 1, 2, 5]  #numerical feature has the same value as the catigorical one
 
 
-    #['HUMAN', 'BODYPART', 'APPLIANCE', 'FOOD', 'VEHICLE', 'CLOTH-CLOTHING', 'PLACE']
-    tenorValues = ['HUMAN', 'BODYPART', 'APPLIANCE', 'FOOD', 'VEHICLE', 'CLOTH-CLOTHING', 'PLACE', 'other']
-    #tenorValues = ['HUMAN', 'other']
+    full_TenorValues = ['HUMAN', 'BODYPART', 'APPLIANCE', 'FOOD', 'VEHICLE', 'CLOTH-CLOTHING', 'PLACE', 'COSMETICS-HYGIENICS', 'ACTION', 'WEATHER', 'SOUND', 'ANIMAL', 'FEELING', 'other']
+    #tenorValues = ['HUMAN', 'BODYPART', 'APPLIANCE', 'FOOD', 'VEHICLE', 'CLOTH-CLOTHING', 'PLACE', 'other']
+    #tenorValues = ['BODYPART', 'other']
+    tenorValues = full_TenorValues
 
 
           #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
@@ -80,7 +81,7 @@ class VectorSpace_tenor:
         s = VectorSpace_tenor #This class
         categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVecotrSpace=s.attrForVectorSpace)
         numericalFeature_names = s.numFeatureNames("self", categoricalVS, categoricalFeature_names, s.attrForVectorSpace, gender=gender)
-        # print(numericalFeature_names)
+        #print(numericalFeature_names)
         numericalVS = []
         len_ = len(numericalFeature_names)
         for row in categoricalVS:

@@ -40,13 +40,15 @@ from sklearn import preprocessing
 class Classification_tenor:
     def __init__(self):
         s = Classification_tenor #this class
+        c = Classifiers
         start = time.time()
-        s.classifier_evaluation('self', classifier = 8)
-        #s.evaluateAllClassifiers(self, numOfClassifiers=8)
-        #s.UFS_featureSelection(self, 25)
+        s.classifier_evaluation('self', classifier = 5, kfold=10)
+        #s.evaluateAllClassifiers(self, numOfClassifiers=6)
+        s.UFS_featureSelection(self, 25)
         #s.RFE_featureSelection(self)
-        #s.TBFS_featureSelection(self)
+        s.TBFS_featureSelection(self)
         #s.lda_plot_2d_3d('self')
+        #s.printDT(self)
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -142,7 +144,7 @@ class Classification_tenor:
         X = x_train[0:, 3:]
         Y = y_train
         # feature extraction
-        model = ExtraTreesClassifier()
+        model = ExtraTreesClassifier(criterion='entropy')
         fit = model.fit(X, Y)
         features = fit.n_features_
         print(features)
@@ -168,13 +170,23 @@ class Classification_tenor:
             if kbest == count_best:
                 break
 
+                # Tree-based feature selection
+                # Tree - based estimators can be used to compute feature importances, which in turn can be used to discard irrelevant features
+
+    def printDT(self):
+        s = Classification_tenor  # this class
+        c = Classifiers
+        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
+        c.DT_classifier_printTree("self", x_train[:, 3:], y_train, feature_names[4:], target_values, 'tenor')
+
+
 
 
         # LDA - Linear Discriminant Analysis
-    def classifier_evaluation(self, classifier=1):
+    def classifier_evaluation(self, classifier=1, kfold=10):
         s = Classification_tenor # this class
         x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            s.readAndSplitKFoldsData('self', 10)
+            s.readAndSplitKFoldsData('self', kfold)
         accuracy = []
         precision_list = []
         recall_list = []
@@ -243,6 +255,8 @@ class Classification_tenor:
         print('%-14s%-14s%-14s%-14s' % ("Classifier", "Precision", "Recall", "F1-Score"))
         for v in classifier_prec_rec_fScor:
             print('%-14s%-14s%-14s%-14s' % (str(c.classifier_names[v[0]]), str(round(v[1],3)), str(round(v[2],3)), str(round(v[3],3))))
+
+
 
 
 
