@@ -95,7 +95,7 @@ class Classifiers:
 
     #4
     def kNeighbors_classifier(self, x_train, y_train, x_test, n_neighbors=15):
-        print('KN')
+        print('KNN')
         clf = neighbors.KNeighborsClassifier(n_neighbors=n_neighbors)
         clf.fit(x_train, y_train)  # .transform(x_train)
         y_pred = clf.predict(x_test)
@@ -113,12 +113,12 @@ class Classifiers:
 
 
     #Print Decision Tree
-    def DT_classifier_printTree(self, x_train, y_train, feature_names, target_values, printFor='tenor'):
+    def DT_classifier_printTree(self, x_train, y_train, feature_names, target_values, printFor='tenor', pdfName = "DT.pdf"):
         print('Print Decision Tree')
         clf = tree.DecisionTreeClassifier()
         clf.fit(x_train, y_train)  # .transform(x_train)
         target_names = []
-        if printFor=='tenor':
+        if printFor=='tenor' or printFor=='gender':
             target_names = target_values
         else:  #for simile
             for n in target_values:
@@ -134,7 +134,7 @@ class Classifiers:
         #dot_data = tree.export_graphviz(clf, out_file=None)
         dot_data = tree.export_graphviz(clf, out_file=None, feature_names=feature_names)
         graph = pydotplus.graph_from_dot_data(dot_data)
-        graph.write_pdf("DT.pdf")
+        graph.write_pdf(pdfName)
         graph = pydotplus.graph_from_dot_data(dot_data)
         Image(graph.create_png())
 

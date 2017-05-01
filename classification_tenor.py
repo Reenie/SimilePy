@@ -44,11 +44,11 @@ class Classification_tenor:
         start = time.time()
         s.classifier_evaluation('self', classifier = 5, kfold=10)
         #s.evaluateAllClassifiers(self, numOfClassifiers=6)
-        s.UFS_featureSelection(self, 25)
+        #s.UFS_featureSelection(self, 20)
         #s.RFE_featureSelection(self)
-        s.TBFS_featureSelection(self)
+        #s.TBFS_featureSelection(self, 20)
         #s.lda_plot_2d_3d('self')
-        #s.printDT(self)
+        s.printDT(self, "Decision_Tree_Tenor.pdf")
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -92,7 +92,7 @@ class Classification_tenor:
         print("%-14s%-14s" % ("Attribute", "Score"))
         for t in score_attr_tupple:
             # print("%-14s%-14s" % (str(a[2]), str(round(a[0], 3))))
-            print(str(t[0]) + ", " + str(round(t[1], 3)))
+            print(str(t[0]) + ", " + str(round(t[1], 1)))
             # print(str(t[0]) +", "  + str(round(t[1], 3)) + ", "+ str(round(t[2],15)) + ", " +  str(t[1]/t[2]))
             # str_for_printing += "(" + str(a[2]) + ", " + str(a[1]) + ", " + str(round(a[0], 3)) + "),  "
             count_best += 1
@@ -173,11 +173,11 @@ class Classification_tenor:
                 # Tree-based feature selection
                 # Tree - based estimators can be used to compute feature importances, which in turn can be used to discard irrelevant features
 
-    def printDT(self):
+    def printDT(self, pdf_file):
         s = Classification_tenor  # this class
         c = Classifiers
         x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData('self', 1)
-        c.DT_classifier_printTree("self", x_train[:, 3:], y_train, feature_names[4:], target_values, 'tenor')
+        c.DT_classifier_printTree("self", x_train[:, 3:], y_train, feature_names[4:], target_values, 'tenor', pdf_file)
 
 
 
@@ -233,13 +233,13 @@ class Classification_tenor:
             s.meanOfLists(self, labels_list, precision_list, recall_list, fscore_list, suport_list)
         #labels = ["1_aspr", "2_stol", "3_apal_p", "4_apal_x", "5_elafr", "6_kokkin", "7_oplism", "8_malak", "9_geros", "10_pist" ]
         labels = vs_tenor.VectorSpace_tenor.tenorValues
-        print('%-14s%-14s%-14s%-14s%-14s' % ("Tenor", "Precision", "Recall", "F1-score", "Support"))
+        print('%-20s%-14s%-14s%-14s%-14s' % ("Tenor", "Precision", "Recall", "F1-score", "Support"))
         #labels = labels_list[0]
         for l, p, r, f, s in zip(labels, precision, recall, fscore, support):
             tuple = (l, round(p, 3), round(r, 3), round(f, 3), int(round(s)))
-            print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+            print('%-20s%-14s%-14s%-14s%-14s' % tuple)
         tuple = ('\nAvg/Total', round(avg_precision,3),round(avg_recall,3), round(avg_fscore,3), int(round(total_support)))
-        print('%-14s%-14s%-14s%-14s%-14s' % tuple)
+        print('%-20s%-14s%-14s%-14s%-14s' % tuple)
         print("avg accuracy: " + str(round(np.mean(accuracy),3)))
         return avg_fscore
 

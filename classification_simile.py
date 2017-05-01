@@ -41,13 +41,13 @@ class Classification_simile:
     def __init__(self):
         s = Classification_simile #this class
         start = time.time()
-        #s.classifier_evaluation('self', classifier = 2)
-        #s.evaluateAllClassifiers(self, numOfClassifiers=7)
-        #s.UFS_featureSelection(self, 25)
+        s.classifier_evaluation('self', classifier = 1)
+        #s.evaluateAllClassifiers(self, numOfClassifiers=6)
+        #s.UFS_featureSelection(self, 20)
         #s.RFE_featureSelection(self)
-        #s.TBFS_featureSelection(self)
+        #s.TBFS_featureSelection(self, 20)
         #s.lda_plot_2d_3d('self')
-        s.printDecitionTree(self)
+        #s.printDecitionTree(self)
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -87,10 +87,10 @@ class Classification_simile:
         # str_for_printing = "Univariate feature selection (best " + str(kbest) + " features):\n"
         count_best = 0
         print("Univariate feature selection (best " + str(kbest) + " features):\n")
-        print("%-14s%-14s" % ("Attribute", "Score"))
+        print("%-14s%-14s%-14s" % ("Attribute", "Score", "p-value"))
         for t in score_attr_tupple:
             # print("%-14s%-14s" % (str(a[2]), str(round(a[0], 3))))
-            print(str(t[0]) + ", " + str(round(t[1], 3)))
+            print(str(t[0]) + ", " + str(round(t[1], 1)) + ", " + str(t[2]))
             # print(str(t[0]) +", "  + str(round(t[1], 3)) + ", "+ str(round(t[2],15)) + ", " +  str(t[1]/t[2]))
             # str_for_printing += "(" + str(a[2]) + ", " + str(a[1]) + ", " + str(round(a[0], 3)) + "),  "
             count_best += 1
@@ -171,10 +171,10 @@ class Classification_simile:
 
 
         # LDA - Linear Discriminant Analysis
-    def classifier_evaluation(self, classifier=1):
+    def classifier_evaluation(self, classifier=1, kfolds=10):
         s = Classification_simile  # this class
-        x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            s.readAndSplitKFoldsData('self', 2)
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values, featureNames = \
+            s.readAndSplitKFoldsData('self', kfolds)
         accuracy = []
         precision_list = []
         recall_list = []
@@ -192,10 +192,10 @@ class Classification_simile:
             #x_train = preprocessing.scale(x_train)
             #x_test = preprocessing.scale(x_test)
             #print(x_test)
-            print(x_train[0:, 2:].shape)
-            print(y_train.shape)
-            print(x_test[0:, 2:].shape)
-            y_pred = Classifiers.run_classifier(self, x_train[0:, 2:], y_train, x_test[0:, 2:], classifier=classifier)
+            #print(x_train[0:, 2:].shape)
+            #print(y_train.shape)
+            #print(x_test[0:, 2:].shape)
+            y_pred = Classifiers.run_classifier("self", x_train[0:, 2:], y_train, x_test[0:, 2:], classifier=classifier)
             t = 0
             f = 0
             for y, y_t in zip(y_pred, y_test):
@@ -228,16 +228,17 @@ class Classification_simile:
         tuple = ('\nAvg/Total', round(avg_precision,3),round(avg_recall,3), round(avg_fscore,3), int(round(total_support)))
         print('%-14s%-14s%-14s%-14s%-14s' % tuple)
         print("avg accuracy: " + str(round(np.mean(accuracy),3)))
+        print(featureNames[3:])
         return avg_fscore
 
 
 
-    def evaluateAllClassifiers(self, numOfClassifiers=8):
+    def evaluateAllClassifiers(self, numOfClassifiers=8, kfolds=10):
         s = Classification_simile
         c = Classifiers
         classifier_prec_rec_fScor = []
         for i in range(numOfClassifiers):
-            pr, rec, f1 = s.classifier_evaluation_withoutPrint("self", classifier=(i+1))
+            pr, rec, f1 = s.classifier_evaluation_withoutPrint("self", classifier=(i+1), folds=kfolds)
             classifier_prec_rec_fScor.append([i+1, pr, rec, f1])
         print('%-14s%-14s%-14s%-14s' % ("Classifier", "Precision", "Recall", "F1-Score"))
         for v in classifier_prec_rec_fScor:
@@ -255,10 +256,9 @@ class Classification_simile:
 
 
 
-    def classifier_evaluation_withoutPrint(self, classifier=1):
+    def classifier_evaluation_withoutPrint(self, classifier=1, folds=10):
         s = Classification_simile  # this class
-        x_train_list, x_test_list, y_train_list, y_test_list, target_values = \
-            s.readAndSplitKFoldsData('self', 10)
+        x_train_list, x_test_list, y_train_list, y_test_list, target_values, featureNames = s.readAndSplitKFoldsData(self, folds=folds)
         accuracy = []
         precision_list = []
         recall_list = []
@@ -548,7 +548,7 @@ class Classification_simile:
         print(np.mean(precision))
 
 
-    def readAndSplitKFoldsData(self, folds):
+    def readAndSplitKFoldsData(self, folds=10):
         feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
         x = np.array(vector_space)
         #x = vector_space[1:, 0:]
@@ -581,7 +581,7 @@ class Classification_simile:
                 y_t.append(x[i, 0])
             x_test_list.append(x_t)
             y_test_list.append(y_t)  #target
-        return x_train_list, x_test_list, y_train_list, y_test_list, target_values
+        return x_train_list, x_test_list, y_train_list, y_test_list, target_values, feature_names
 
 
 
@@ -595,7 +595,7 @@ class Classification_simile:
         for tn in x[0:, 0]:
             if not (tn in target_values):
                 target_values.append(tn)
-        #print(target_values)
+        #print(feature_names)
         random.shuffle(x)
         l = len(x)
         training_len = int(l*training_fraction)

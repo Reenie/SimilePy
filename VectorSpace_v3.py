@@ -3,13 +3,13 @@ import main
 
 class VectorSpace_v3:
     attrForVectorSpace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #all atributes
-    attrWithMultipleCategoricalValues = [3, 4, 5, 12] #numerical vector space has one feature for each categorical value
+    attrWithMultipleCategoricalValues = [3, 4, 5, 6, 12] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
 
           #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
     some_attr = [0, 1, 2, 3,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
-    numOfGenders = 3 #it should be changed to 3 or 2
+    numOfGenders = 2 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
 
