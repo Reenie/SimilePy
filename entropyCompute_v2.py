@@ -1,6 +1,6 @@
 import numpy as np
 
-import VectorSpace_v3
+import VectorSpace_simile
 import fileToMatrix as fileToMatrix
 import main as main
 
@@ -33,7 +33,7 @@ class EntropyCompute_v2:
 
 
     def calcEntropy(self, filename):
-        vs3 = VectorSpace_v3.VectorSpace_v3
+        vs3 = VectorSpace_simile.VectorSpace_simile
         ec = EntropyCompute_v2
         vectorSpace, featurenames = vs3.featureMatrix("self", [filename], attrForVecotrSpace=vs3.attrForVectorSpace)
         featurenames = np.array(featurenames)
@@ -53,7 +53,7 @@ class EntropyCompute_v2:
 
 
     def calcEntropy_inWholeDataset(self, filenames):
-        vs3 = VectorSpace_v3.VectorSpace_v3
+        vs3 = VectorSpace_simile.VectorSpace_simile
         ec = EntropyCompute_v2
         vectorSpace, featurenames = vs3.featureMatrix("self", filenames, attrForVecotrSpace=vs3.attrForVectorSpace)
         featurenames = np.array(featurenames)

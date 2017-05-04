@@ -4,7 +4,7 @@ from matplotlib import style
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.utils.multiclass import unique_labels
 
-import VectorSpace_v3 as vs3
+import VectorSpace_simile as vs3
 import main
 from Classifiers import Classifiers
 
@@ -549,7 +549,7 @@ class Classification_simile:
 
 
     def readAndSplitKFoldsData(self, folds=10):
-        feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
+        feature_names, vector_space = vs3.VectorSpace_simile.numericalVectorSpace("self", main.filenames)
         x = np.array(vector_space)
         #x = vector_space[1:, 0:]
         np.random.shuffle(x)
@@ -586,7 +586,7 @@ class Classification_simile:
 
 
     def readAndSplitData(self, training_fraction):
-        feature_names, vector_space = vs3.VectorSpace_v3.numericalVectorSpace("self", main.filenames)
+        feature_names, vector_space = vs3.VectorSpace_simile.numericalVectorSpace("self", main.filenames)
         x = np.array(vector_space)
         #x = vector_space[0:, 0:]
         x = x.astype(float)

@@ -1,7 +1,7 @@
 import main
 
 
-class VectorSpace_v3:
+class VectorSpace_simile:
     attrForVectorSpace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #all atributes
     attrWithMultipleCategoricalValues = [3, 4, 5, 6, 12] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
@@ -36,14 +36,14 @@ class VectorSpace_v3:
     txt_datapath = main.dataset_path + "txt/"
 
     def __init__(self):
-        s = VectorSpace_v3
+        s = VectorSpace_simile
         #s.featureMatrix(self, main.filenames, attrForVecotrSpace=s.attrForVectorSpace)
         s.numericalVectorSpace(self, main.filenames, gender=s.numOfGenders )
 
 
     # VectorSpace in whole dataset with usefull attributes only
     def featureMatrix(self, filenames, attrForVecotrSpace = []):
-        s = VectorSpace_v3
+        s = VectorSpace_simile
         matrix = []
         feature_names = []
         flag = 0
@@ -68,7 +68,7 @@ class VectorSpace_v3:
         return matrix, feature_names
 
     def numericalVectorSpace(self, filenames, gender=numOfGenders):
-        s = VectorSpace_v3 #This class
+        s = VectorSpace_simile #This class
         categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVecotrSpace=s.attrForVectorSpace)
         numericalFeature_names = s.numFeatureNames("self", categoricalVS, categoricalFeature_names, s.attrForVectorSpace, gender=gender)
         # print(numericalFeature_names)
@@ -123,7 +123,7 @@ class VectorSpace_v3:
         # it returns an array with numerical feature names
 
     def numFeatureNames(self, categoricalVS, categoricalFeature_names, attrForVectorSpace, gender=3):
-        s = VectorSpace_v3 #this class
+        s = VectorSpace_simile #this class
         numerical_feature_names = []
         # index_numFeatures = -1
         index_catFeatures = -1
@@ -143,7 +143,7 @@ class VectorSpace_v3:
         # it returns array with numerical feature names of a specific categorical feature
 
     def numericalValuesOfFeature(self, categoricalVS, indexOfFeature, categorical_feature_name, gender=3):
-        s = VectorSpace_v3  # this class
+        s = VectorSpace_simile  # this class
         values = []
         for row in categoricalVS:
             row_val = row[indexOfFeature].strip() #replace(" ", "")
@@ -179,4 +179,4 @@ class VectorSpace_v3:
 
 
 
-VectorSpace_v3()
+VectorSpace_simile()
