@@ -20,11 +20,11 @@ class XlsxToTxt:
 
     linux_dataset_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/"
     win_dataset_path = "E:/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/"
-    dataset_path = win_dataset_path  #It should be changed according to pc
+    dataset_path = linux_dataset_path  #It should be changed according to pc
     txt_datapath = dataset_path + "txt/"
 
-    cellsForTXT = [3, 5, 7, 8, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20]
-    headers = ["",#0
+    cellsForTXT = [3, 5, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22]
+    headers = ["", #0
                "TEXT",#1
                "SIMILE",#2
                "GENDER",#3
@@ -37,14 +37,16 @@ class XlsxToTxt:
                "DETERMINER",#10
                "EMPM",#11
                "EMPP",#12
-               "IWO",#13
-               "IXP-CREATIVE",#14
-               "IXP-EXPANSION",#15
-               "IXP-N_W_PUNC",#16
-               "MOD",#17
-               "AGR",#18
-               "MWO",#19
-               "VAR"]#20
+               "COMP", #13
+               "IWO",#14
+               "IXP-CREATIVE",#15
+               "IXP-EXPANSION",#16
+               "IXP-N_W_PUNC",#17
+               "MOD",#18
+               "AGR",#19
+               "MWO",#20
+               "VAR",#21
+               "AN"] #22
 
 
 
