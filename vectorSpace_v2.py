@@ -60,9 +60,9 @@ class VectorSpace_v2:
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
             numericalVS.append(numerical_row)
-        #print(numericalFeature_names)
-        #print("\n")
-        #print(numericalVS)
+        print(numericalFeature_names)
+        print("\n")
+        print(numericalVS)
         return numericalFeature_names, numericalVS
 
 
