@@ -39,8 +39,9 @@ class FileToMatrix:
                         col_index = 0
                         for column in splited_row:
                             col_index += 1
-                            if col_index > 1 and col_index != 4 and col_index != 6 and col_index != 9:
+                            if col_index > 1 and col_index != 3 and col_index != 6 and col_index != 9:
                                 feature_names.append(splited_row[col_index - 1].strip())
+                        print(feature_names)
                     if count_line > 1:
                         splited_row = (line.strip()).split("#")
                         col_index = 0

@@ -31,7 +31,7 @@ class XlsxToTxt:
     dataset_path = win_dataset_path  # It should be changed according to pc
     txt_datapath = dataset_path + "txt/"
 
-    cellsForTXT = [3, 5, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23]
+    cellsForTXT = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     headers = ["",  # 0
                "TEXT",  # 1
                "SIMILE",  # 2
@@ -62,8 +62,8 @@ class XlsxToTxt:
         s = XlsxToTxt
         start = timeit.default_timer()
         # s.xlsx_to_txt("self", specificFile=1, cellsForTxt=s.cellsForTXT)
-        #s.convertAllXlsxToTXT(self)
-        s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[20])
+        s.convertAllXlsxToTXT(self)
+        #s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[20])
         print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
     def convertAllXlsxToTXT(self):

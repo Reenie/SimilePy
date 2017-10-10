@@ -1,10 +1,10 @@
+import pandas
 import scipy.stats
 from scipy.stats.stats import pearsonr
-from fileToMatrix import FileToMatrix
-import sys
+
 import main as main
-import pandas
-import texttable as tt
+from Old.fileToMatrix import FileToMatrix
+
 
 class chiSquaredTest:
     def __init__(self):

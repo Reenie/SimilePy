@@ -1,5 +1,5 @@
-import fileToMatrix as f
 import main
+from Old import fileToMatrix as f
 
 
 class VectorSpace:

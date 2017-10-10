@@ -2,34 +2,44 @@ import main
 
 
 class VectorSpace_simile:
-    attrForVectorSpace = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #all atributes
-    attrWithMultipleCategoricalValues = [3, 4, 5, 6, 12] #numerical vector space has one feature for each categorical value
+    full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] #all atributes
+    attrWithMultipleCategoricalValues = [3, 4, 5, 6, 7] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
 
           #[0, 1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-    full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
-    some_attr = [0, 1, 2, 3,  5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] #it should be changed
+    full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24] #it should be changed
+    some_attr = [3, 8, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23]#it should be changed
     numOfGenders = 2 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
 
-    txtHeaders = ["SIMILE", #0
-                  "XLSX_ROW", #1
-                  "TXT_ROW",  # 2
-                  "GENDER",  # 3
-                  "LEMMA", #4
-                  "TEN_GEN_SEMS",  # 5  TENOR SEM GENERALISATION
-                  "MWE_TYPE",  # 6
-                  "DETERMINER",  # 7
-                  "EMPM",  # 8
-                  "EMPP",  # 9
-                  "IWO",  # 10
-                  "IXP-CREATIVE",  #11
-                  "IXP-N_W_PUNC",  # 12
-                  "MOD",  # 13
-                  "AGR",  # 14
-                  "MWO",  # 15
-                  "VAR"]  # 16
+
+
+    txtHeaders = ["",  #FILE 0
+               "TEXT",  # 1
+               "SIMILE",  # 2
+               "GENDER",  # 3
+               "HEAD",  # 4
+               "LEMMA",  # 5
+               "MOD_PRED_SEMS",  # 6   MODIFIED PRED SEMS
+               "TEN_GEN_SEMS",  # 7  TENOR SEM GENERALISATION
+               "MWE_TYPE",  # 8
+               "PHENOMENON",  # 9
+               "DETERMINER",  # 10
+               "EMPM",  # 11
+               "EMPP",  # 12
+               "COMP",  # 13
+               "IWO",  # 14
+               "IXP-CREATIVE",  # 15
+               "IXP-EXPANSION",  # 16
+               "IXP-N",  # 17
+               "IXP-W",  # 18
+               "IXP-PUNC",  # 19
+               "MOD",  # 20
+               "AGR",  # 21
+               "MWO",  # 22
+               "VAR",  # 23
+               "AN"]  # 24
 
 
 
@@ -42,26 +52,30 @@ class VectorSpace_simile:
 
 
     # VectorSpace in whole dataset with usefull attributes only
-    def featureMatrix(self, filenames, attrForVecotrSpace = []):
+    def featureMatrix(self, filenames, attrForVectorSpace = []):
         s = VectorSpace_simile
         matrix = []
         feature_names = []
         flag = 0
         for file in filenames:
             with open(s.txt_datapath + "" + file, encoding="utf8") as f:
-                if flag == 0:
-                    for c in s.attrForVectorSpace:
+                if flag == 0:  #first line
+                    for c in attrForVectorSpace:
                         feature_names.append(s.txtHeaders[c])
                     flag = 1  # greater than 1
-                firstLine_flag = 0
-                for line in f:
-                    if firstLine_flag == 0:  #discard first line
-                        firstLine_flag = 1
-                    else:
+                    ###########
+                    print(feature_names)
+                if flag == 1:
+                    for line in f:
                         splited_row = (line.strip()).split("#")
+                        #########
+                        #print(splited_row)
                         rowVector = []
-                        for c in s.attrForVectorSpace:
+                        for c in attrForVectorSpace:
                             rowVector.append(splited_row[c].strip())
+                            ###########
+                            #print(c)
+                            #print(rowVector)
                         matrix.append(rowVector)
         #print(feature_names)
         #print(matrix)
@@ -69,7 +83,7 @@ class VectorSpace_simile:
 
     def numericalVectorSpace(self, filenames, gender=numOfGenders):
         s = VectorSpace_simile #This class
-        categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVecotrSpace=s.attrForVectorSpace)
+        categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVectorSpace=s.attrForVectorSpace)
         numericalFeature_names = s.numFeatureNames("self", categoricalVS, categoricalFeature_names, s.attrForVectorSpace, gender=gender)
         # print(numericalFeature_names)
         numericalVS = []

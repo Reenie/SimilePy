@@ -1,6 +1,7 @@
 import numpy as np
-import fileToMatrix as fileToMatrix
+
 import main as main
+from Old import fileToMatrix as fileToMatrix
 
 
 class EntropyCompute:

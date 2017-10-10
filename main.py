@@ -1,5 +1,5 @@
-win_dataset_path = "E:/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/txt/"
-lin_dataset_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/txt/"
+win_dataset_path = "E:/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/"
+lin_dataset_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/"
 
 win_statistics_path = "E:/Dropbox/EMP_DID_dropbox/NLP/SIMILES/statistics/"
 lin_statistics_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/Statistics/"
