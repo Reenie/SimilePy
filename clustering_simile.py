@@ -17,12 +17,12 @@ from sklearn.decomposition import PCA, IncrementalPCA, KernelPCA
 
 import numpy as np
 import pandas as pd
-import nltk
+#import nltk
 import re
 import os
 import codecs
 from sklearn import feature_extraction
-import mpld3
+#import mpld3
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import KMeans, MeanShift
 
@@ -32,8 +32,8 @@ class Clustering_simile:
     def __init__(self):
         s = Clustering_simile #this class
         start = time.time()
-        #s.lda_plot_2d_3d('self')
-        s.kmeans_Clustering(self)
+        s.lda_plot_2d_3d('self')
+        #s.kmeans_Clustering(self)
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
 
@@ -49,7 +49,7 @@ class Clustering_simile:
         random_state = 170
         x_d2, x_d3 = s.LDA(self, X, y_train)
         # Incorrect number of clusters
-        y_pred = KMeans(n_clusters=4, random_state=random_state).fit_predict(x_d3)
+        y_pred = KMeans(n_clusters=10, random_state=random_state).fit_predict(x_d3)
         plt.subplot(111)
         plt.scatter(x_d3[:, 0], x_d3[:, 1], x_d3[:, 2], c=y_pred)
 
@@ -67,14 +67,14 @@ class Clustering_simile:
             #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
             #x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
             #x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
-            colors = ['magenta', 'turquoise', 'brown',
-                  'red', 'black', 'blue',
-                  'cyan', 'green', 'orange',
-                  'yellow']
-            #colors = ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9']
-            markers = ['o', '^', 'D', '>', '*', 'p', 'P', '1', 'X', 's']
+            colors = ['magenta', 'turquoise', 'brown', 'red', 'black', 'blue', 'cyan', 'green', 'orange', 'yellow',
+                      '#029386', '#9a0eea', '#00035b' , '#d1b26f', '#7e1e9c', '#ff81c0', '#650021', '#cea2fd', '#610023', '#033500' ]
+                      #'teal', 'pink', 'purple', 'grey', 'violet', 'dark blue', 'tan', 'forest green', 'olive', '#01153e']
+            #colors = ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19' ]
+            markers = ['o', '^', 'D', '>', '*', 'p', 'P', '1', 'X', 's',
+                       'o', '^', 'D', '>', '*', 'p', 'P', '1', 'X', 's']
             labels = ["1_asp", "2_sto", "3_ap_p", "4_ap_x", "5_ela", "6_kok", "7_opl", "8_mal",
-                      "9_ger", "10_pis"]
+                      "9_ger", "10_pis", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
             #clustering.plot_2d_3d("self", i, colors, markers, x_d2, y_train, target_values)
             fig = plt.figure(figure_number-1)
             ax1 = fig.add_subplot(111)
@@ -201,8 +201,8 @@ class Clustering_simile:
         random.shuffle(x)
         l = len(x)
         training_len = int(l*training_fraction)
-        x_train = x[:training_len, 1:]
-        x_test = x[training_len:, 1:]
+        x_train = x[:training_len, 3:]
+        x_test = x[training_len:, 3:]
         y_train = x[:training_len, 0]  #target
         y_test = x[training_len:, 0]   #target
         return x_train, x_test, y_train, y_test, target_values, feature_names

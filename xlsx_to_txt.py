@@ -31,7 +31,7 @@ class XlsxToTxt:
     dataset_path = win_dataset_path  # It should be changed according to pc
     txt_datapath = dataset_path + "txt/"
 
-    cellsForTXT = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    cellsForTXT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     headers = ["",  # 0
                "TEXT",  # 1
                "SIMILE",  # 2
@@ -61,9 +61,9 @@ class XlsxToTxt:
     def __init__(self):
         s = XlsxToTxt
         start = timeit.default_timer()
-        # s.xlsx_to_txt("self", specificFile=1, cellsForTxt=s.cellsForTXT)
-        s.convertAllXlsxToTXT(self)
-        #s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[20])
+         #s.xlsx_to_txt("self", specificFile=11, cellsForTxt=s.cellsForTXT)
+        #s.convertAllXlsxToTXT(self)
+        s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[2, 12, 13, 16, 17, 18])
         print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
     def convertAllXlsxToTXT(self):
@@ -95,7 +95,7 @@ class XlsxToTxt:
                     if rowNum == 0:
                         wr.write("FILE # XLSX ROW # TXT ROW ")
                         for h in cellsForTxt:
-                            wr.write("# " + s.headers[h])
+                            wr.write(" # " + s.headers[h])
                         wr.write("\n")
                     if (xlsxRow_index > 3):
                         flag += 1
