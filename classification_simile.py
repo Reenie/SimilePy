@@ -41,11 +41,11 @@ class Classification_simile:
     def __init__(self):
         s = Classification_simile #this class
         start = time.time()
-        s.classifier_evaluation('self', classifier = 1)
+        #s.classifier_evaluation('self', classifier = 1)
         #s.evaluateAllClassifiers(self, numOfClassifiers=6)
         #s.UFS_featureSelection(self, 20)
         #s.RFE_featureSelection(self)
-        #s.TBFS_featureSelection(self, 20)
+        s.TBFS_featureSelection(self, 20)
         #s.lda_plot_2d_3d('self')
         #s.printDecitionTree(self)
         end = time.time()

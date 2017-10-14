@@ -3,6 +3,9 @@ import numpy as np
 import main as main
 
 class FileToMatrix:
+    usefull_attributes = [1 ,2 ]
+
+
     # it returns the array of vector space
     def fileToVectorSpace(filename):
         vectorSpace = []
@@ -61,7 +64,7 @@ class FileToMatrix:
         vectorSpace = []
         feature_names = []
         # print(dataset_path + "" + filename)
-        with open(main.dataset_path + "" + filename, encoding="utf8") as f:
+        with open(main.dataset_path + "txt/" + filename, encoding="utf8") as f:
             count_line = 0
             for line in f:
                 count_line += 1
@@ -90,7 +93,7 @@ class FileToMatrix:
         vectorSpace = []
         feature_names = []
         # print(dataset_path + "" + filename)
-        with open(main.dataset_path + "" + filename, encoding="utf8") as f:
+        with open(main.dataset_path + "txt/" + filename, encoding="utf8") as f:
             count_line = 0
             for line in f:
                 count_line += 1
@@ -123,7 +126,7 @@ class FileToMatrix:
         flag = 0
         for file in filenames:
             index_of_file += 1
-            with open(main.dataset_path + "" + file, encoding="utf8") as f:
+            with open(main.dataset_path + "txt/" + file, encoding="utf8") as f:
                 count_line = 0
                 for line in f:
                     count_line += 1
