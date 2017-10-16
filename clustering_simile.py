@@ -32,7 +32,8 @@ class Clustering_simile:
     def __init__(self):
         s = Clustering_simile #this class
         start = time.time()
-        s.lda_plot_2d_3d('self')
+        #s.lda_plot_2d_3d('self', main.filenames)
+        s.lda_plot_2d_3d_perSimile('self', main.filenames[0])
         #s.kmeans_Clustering(self)
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
@@ -40,9 +41,9 @@ class Clustering_simile:
 
 
 
-    def kmeans_Clustering(self):
+    def kmeans_Clustering(self, filenames = main.filenames):
         s = Clustering_simile
-        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData(self, 1)
+        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData(self, 1, filenames)
         X = x_train[:, 3:]
         n_samples = len(X)
         print("n_samples: " + str(n_samples))
@@ -56,12 +57,12 @@ class Clustering_simile:
         plt.show()
 
 
-    def lda_plot_2d_3d(self):
+    def lda_plot_2d_3d(self, filenames = main.filenames):
         s = Clustering_simile  # this class
         figure_number = 0
         for i in range(3):
             figure_number +=2
-            x_train, x_test, y_train, y_test, target_values, featureNames = s.readAndSplitData('self', 1)
+            x_train, x_test, y_train, y_test, target_values, featureNames = s.readAndSplitData('self', 1, filenames)
             #x_d2, x_d3 = c.LSA(self, x_train)           #Latent Semantic Analysis
             x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
             #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
@@ -94,7 +95,38 @@ class Clustering_simile:
             plt.title('SIMILE (3D)')
             plt.show()
 
-
+    def lda_plot_2d_3d_perSimile(self, filename=main.filenames[1]):
+            s = Clustering_simile  # this class
+            figure_number = 0
+            for i in range(1):
+                figure_number += 2
+                x_train, x_test, y_train, y_test, target_values, featureNames = s.readAndSplitData('self', 1, [filename])
+                #x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
+                x_d2, x_d3 = s.LDA(self, x_train, y_train)  # Linear Discriminant Analysis
+                # x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
+                # x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
+                # x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
+                color = 'magenta'
+                # 'teal', 'pink', 'purple', 'grey', 'violet', 'dark blue', 'tan', 'forest green', 'olive', '#01153e']
+                # colors = ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19' ]
+                marker = 'o'
+                label = filename
+                # clustering.plot_2d_3d("self", i, colors, markers, x_d2, y_train, target_values)
+                fig = plt.figure(figure_number - 1)
+                ax1 = fig.add_subplot(111)
+                # print(target_values)
+                #for color, i, m in zip(colors, target_values, markers):
+                ax1.scatter(x_d2[y_train == i, 0], x_d2[y_train == i, 1], alpha=.8, color=color, marker=marker, label=label)
+                plt.legend(loc='best', shadow=False, scatterpoints=1)
+                plt.title('SIMILE (2D)')
+                # plt.show()
+                fig2 = plt.figure(figure_number)
+                ax2 = fig2.add_subplot(111, projection='3d')
+                #for color, i, m in zip(colors, target_values, markers):
+                ax2.scatter(x_d3[y_train == i, 0], x_d3[y_train == i, 1], x_d3[y_train == i, 2], alpha=.8, color=color, marker=marker, label=label)
+                plt.legend(loc='best', shadow=False, scatterpoints=1)
+                plt.title('SIMILE (3D)')
+                plt.show()
 
 
 
@@ -150,8 +182,8 @@ class Clustering_simile:
 
 
 
-    def readAndSplitKFoldsData(self, folds=10):
-        feature_names, vector_space = vs.VectorSpace_simile.numericalVectorSpace("self", main.filenames)
+    def readAndSplitKFoldsData(self, folds=10, filenames=[]):
+        feature_names, vector_space = vs.VectorSpace_simile.numericalVectorSpace("self", filenames)
         x = np.array(vector_space)
         #x = vector_space[1:, 0:]
         np.random.shuffle(x)
@@ -187,8 +219,8 @@ class Clustering_simile:
 
 
 
-    def readAndSplitData(self, training_fraction):
-        feature_names, vector_space = vs.VectorSpace_simile.numericalVectorSpace("self", main.filenames)
+    def readAndSplitData(self, training_fraction, filenames):
+        feature_names, vector_space = vs.VectorSpace_simile.numericalVectorSpace("self", filenames)
         x = np.array(vector_space)
         #x = vector_space[0:, 0:]
         x = x.astype(float)
