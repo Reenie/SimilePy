@@ -101,11 +101,11 @@ class Clustering_simile:
             for i in range(1):
                 figure_number += 2
                 x_train, x_test, y_train, y_test, target_values, featureNames = s.readAndSplitData('self', 1, [filename])
-                #x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
-                x_d2, x_d3 = s.LDA(self, x_train, y_train)  # Linear Discriminant Analysis
+                x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
+                #x_d2, x_d3 = s.LDA(self, x_train, y_train)  # Linear Discriminant Analysis
                 # x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
-                # x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
-                # x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
+                #x_d2, x_d3 = s.PCA_(self, x_train)           #principal component analysis (PCA)
+                #_d2, x_d3 = s.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
                 color = 'magenta'
                 # 'teal', 'pink', 'purple', 'grey', 'violet', 'dark blue', 'tan', 'forest green', 'olive', '#01153e']
                 # colors = ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19' ]
