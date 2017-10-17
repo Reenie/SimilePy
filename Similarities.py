@@ -28,6 +28,7 @@ class Similarities:
 
     def compute_centroid_Vectors(self):
         meanVector_per_simle = []
+        sdVector_per_simle = []
         #for filename in main.filenames:
         numericalFeature_names, numericalVS = VSS.VectorSpace_simile.numericalVectorSpace(self, main.filenames)
         #print(numericalFeature_names)
@@ -39,13 +40,14 @@ class Similarities:
             b = []
             for v in a:
                 if v[0] == i:
-
                     b.append(v[3:])
-            temp_row = np.mean(b, axis=0)
-            meanVector_per_simle.append((i, temp_row))
+            mean_row = np.mean(b, axis=0)
+            sd_row = np.std(b, axis=0)
+            meanVector_per_simle.append((i, mean_row))
+            sdVector_per_simle.append((i, sd_row))
         #for v in meanVector_per_simle:
         #    print(v)
-        return meanVector_per_simle
+        return meanVector_per_simle, sdVector_per_simle
 
     def cosineSimilarity(self):
         s = Similarities
@@ -55,8 +57,8 @@ class Similarities:
             row_temp = []
             for vv in meanVector:
                 #print(v[1])
-                #print(vv[1])
-                c = cosine_similarity(v[1], vv[1])
+                #print(v[1].reshape(1, -1))
+                c = cosine_similarity(v[1].reshape(1, -1), vv[1].reshape(1, -1))
                 #print(round(c[0][0],3))
                 row_temp.append(round(c[0][0], 3))
             similarities.append((v[0], row_temp))
