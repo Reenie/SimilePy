@@ -53,7 +53,7 @@ class VectorSpace_simile:
 
 
     # VectorSpace in whole dataset with usefull attributes only
-    def featureMatrix(self, filenames, attrForVectorSpace = []):
+    def featureMatrix(self, filenames, attrForVectorSpace = [], genders=numOfGenders):
         s = VectorSpace_simile
         matrix = []
         feature_names = []
@@ -73,6 +73,11 @@ class VectorSpace_simile:
                             splited_row = (line.strip()).split("#")
                             rowVector = []
                             for c in attrForVectorSpace:
+                                if(s.txtHeaders[c]=='GENDER' and genders == 2 ):
+                                    if splited_row[c].strip() == "N":
+                                        rowVector.append(splited_row[c].strip())
+                                    elif splited_row[c].strip() == "M" or splited_row[c].strip() == "F" or splited_row[c].strip() == "M/F":
+                                        rowVector.append('M/F')
                                 rowVector.append(splited_row[c].strip())
                             matrix.append(rowVector)
         #print(feature_names)
@@ -105,7 +110,7 @@ class VectorSpace_simile:
                         numerical_feature_name = "N"
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
-                    if c.replace(" ", "") == "M" or c.replace(" ", "") == "F":
+                    if c.replace(" ", "") == "M" or c.replace(" ", "") == "F" or c.replace(" ", "") == "M/F":
                         numerical_feature_name = "M/F"
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
@@ -135,7 +140,7 @@ class VectorSpace_simile:
 
         # it returns an array with numerical feature names
 
-    def numFeatureNames(self, categoricalVS, categoricalFeature_names, attrForVectorSpace, gender=3):
+    def numFeatureNames(self, categoricalVS, categoricalFeature_names, attrForVectorSpace, gender=numOfGenders):
         s = VectorSpace_simile #this class
         numerical_feature_names = []
         # index_numFeatures = -1
@@ -161,7 +166,7 @@ class VectorSpace_simile:
 
         # it returns array with numerical feature names of a specific categorical feature
 
-    def numericalValuesOfFeature(self, categoricalVS, indexOfFeature, categorical_feature_name, gender=3):
+    def numericalValuesOfFeature(self, categoricalVS, indexOfFeature, categorical_feature_name, gender=numOfGenders):
         s = VectorSpace_simile  # this class
         values = []
         for row in categoricalVS:
@@ -177,7 +182,7 @@ class VectorSpace_simile:
                     #print(row_val)
                     if row_val == "N":
                         val = "N"
-                    elif row_val=="M" or row_val=="F":
+                    elif row_val=="M" or row_val=="F" or row_val=="M/F":
                         val = "M/F"
                     else:
                         print("unknown gender: " + row_val + "- file: " + row[0]+ " row: " + row[1] + " textRow: " + row[2] )

@@ -71,7 +71,7 @@ class Distinct_vectors:
         numberOfDistinctVectorsPerSimile = [] # vectros with the excel cell number of the same vectors per simile
         numericalFeature_names = []
         for filename in main.filenames:
-            numericalFeature_names, numericalVS = vss.numericalVectorSpace(self, [filename], gender=vss.numOfGenders)
+            numericalFeature_names, numericalVS = vss.numericalVectorSpace(self, [filename])
             #numberoOfVectors_per_simile.append((filename, len(numericalVS)))
             count = 0
             distinct_numericalVectorSpace_perSimile = []
