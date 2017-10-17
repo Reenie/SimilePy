@@ -19,14 +19,18 @@ class Distinct_vectors:
     def printStatistics_of_DistinctVectors(self):
         s = Distinct_vectors
         distinct_numericalVectorSpace, numericalFeature_names, numberOfDistinctVectorsPerSimile = s.distinctNumericalVectorSpace(self)
+        print(numericalFeature_names)
         a, b, n = s.distinctNumericalVectorSpace_inWholeDataset(self)
         print("\r\n\r\n")
-        print('%-35s%-19s%-14s%-13s%-10s%-10s' % ("File Name", "Distinct Vectors", "All Vectors", "Percentage", "Entropy", "Normalized entropy"))
+        #print('%-35s%-19s%-14s%-13s%-10s%-10s' % ("File Name", "Distinct Vectors", "All Vectors", "Percentage", "Entropy", "Normalized entropy"))
+        print('%-35s%-19s%-14s%-13s%-10s' % ("File Name", "Distinct Vectors", "All Vectors", "Percentage", "Entropy"))
         for e in numberOfDistinctVectorsPerSimile:
             entropy, normalized_entropy = s.entropyOfDistinctVectors(self, e[4], e[2])
-            print('\r%-35s%-19s%-14s%-13s%-10s%-10s' % (e[0], e[1], e[2], e[3], entropy, normalized_entropy))
+            #print('\r%-35s%-19s%-14s%-13s%-10s%-10s' % (e[0], e[1], e[2], e[3], entropy, normalized_entropy))
+            print('\r%-35s%-19s%-14s%-13s%-10s' % (e[0], e[1], e[2], e[3], entropy))
         entropy, normalized_entropy = s.entropyOfDistinctVectors(self, n[4], n[2])
-        print('\r%-35s%-19s%-14s%-13s%-10s%-10s' % (n[0], n[1], n[2], n[3], entropy, normalized_entropy))
+        #print('\r%-35s%-19s%-14s%-13s%-10s%-10s' % (n[0], n[1], n[2], n[3], entropy, normalized_entropy))
+        print('\r%-35s%-19s%-14s%-13s%-10s' % (n[0], n[1], n[2], n[3], entropy))
         print("\r\n\r\n")
 
         print("Groups Of Distinct Vectors:\r\n")

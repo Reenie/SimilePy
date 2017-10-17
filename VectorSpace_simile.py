@@ -3,11 +3,11 @@ import main
 
 class VectorSpace_simile:
     full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26] #all atributes
-    attrWithMultipleCategoricalValues = [5, 6, 7, 8, 9, 11] #numerical vector space has one feature for each categorical value
+    attrWithMultipleCategoricalValues = [5, 6, 7, 8, 9, 10, 11] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
 
 
-    some_attr = [0, 1, 2, 5, 10, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25]#it should be changed
+    some_attr = [0, 1, 2, 5,  12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25]#it should be changed
     numOfGenders = 2 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
@@ -78,7 +78,8 @@ class VectorSpace_simile:
                                         rowVector.append(splited_row[c].strip())
                                     elif splited_row[c].strip() == "M" or splited_row[c].strip() == "F" or splited_row[c].strip() == "M/F":
                                         rowVector.append('M/F')
-                                rowVector.append(splited_row[c].strip())
+                                else:
+                                    rowVector.append(splited_row[c].strip())
                             matrix.append(rowVector)
         #print(feature_names)
         #print(matrix)
@@ -88,8 +89,11 @@ class VectorSpace_simile:
     def numericalVectorSpace(self, filenames, gender=numOfGenders):
         s = VectorSpace_simile #This class
         categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVectorSpace=s.attrForVectorSpace)
+        ############3
+        #print(categoricalFeature_names)
+        #print(categoricalVS)
         numericalFeature_names = s.numFeatureNames("self", categoricalVS, categoricalFeature_names, s.attrForVectorSpace, gender=gender)
-        # print(numericalFeature_names)
+        #print(numericalFeature_names)
         numericalVS = []
         len_ = len(numericalFeature_names)
         for row in categoricalVS:
@@ -130,6 +134,7 @@ class VectorSpace_simile:
                         index = numericalFeature_names.index(numerical_feature_name)
                         numerical_row[index] = 1
             numericalVS.append(numerical_row)
+        #################
         #print(numericalFeature_names)
         #print("\n")
         #print(numericalVS)

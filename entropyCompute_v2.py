@@ -8,7 +8,7 @@ import operator
 class EntropyCompute_v2:
     def __init__(self):
         s = EntropyCompute_v2
-        #s.calcAndPrintEntropyOfAllFiles_v2('self')
+        s.calcAndPrintEntropyOfAllFiles_v2('self')
         s.calcAndPrintEntropyOfAllFiles('self')
 
     def calcAndPrintEntropyOfAllFiles(self):
