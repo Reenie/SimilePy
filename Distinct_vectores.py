@@ -131,6 +131,8 @@ class Distinct_vectors:
 
 
 
+
+
         # per distinct vector --> simile and number of vectors
     def groups_of_DistinctVector(self, simile_and_excelNumber_of_theSameVectors):
         s = Distinct_vectors
@@ -146,7 +148,7 @@ class Distinct_vectors:
             temp_list = []
             for key in hash.keys():
                 temp_list.append((key, hash[key]))
-            temp_list.sort(key=lambda x: x[0])
+            temp_list.sort(key=lambda x: -x[1])
             temp_tuple = (numOfHashValues, temp_list)
             distinctVectors.append(temp_tuple)
         distinctVectors.sort(key=lambda x: -x[0])

@@ -32,8 +32,8 @@ class Clustering_simile:
     def __init__(self):
         s = Clustering_simile #this class
         start = time.time()
-        #s.lda_plot_2d_3d('self', main.filenames)
-        s.lda_plot_2d_3d_perSimile('self', main.filenames[0])
+        s.lda_plot_2d_3d('self', main.filenames)
+        #s.lda_plot_2d_3d_perSimile('self', main.filenames[0])
         #s.kmeans_Clustering(self)
         end = time.time()
         print("\n" + str(round((end - start), 3)) + " sec")
@@ -48,7 +48,8 @@ class Clustering_simile:
         n_samples = len(X)
         print("n_samples: " + str(n_samples))
         random_state = 170
-        x_d2, x_d3 = s.LDA(self, X, y_train)
+        #x_d2, x_d3 = s.LDA(self, X, y_train)
+        x_d2, x_d3 = s.PCA_(self, X)
         # Incorrect number of clusters
         y_pred = KMeans(n_clusters=10, random_state=random_state).fit_predict(x_d3)
         plt.subplot(111)
@@ -60,20 +61,20 @@ class Clustering_simile:
     def lda_plot_2d_3d(self, filenames = main.filenames):
         s = Clustering_simile  # this class
         figure_number = 0
-        for i in range(3):
-            figure_number +=2
+        for i in range(1):
+            figure_number += 2
             x_train, x_test, y_train, y_test, target_values, featureNames = s.readAndSplitData('self', 1, filenames)
-            #x_d2, x_d3 = c.LSA(self, x_train)           #Latent Semantic Analysis
-            x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
-            #x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
-            #x_d2, x_d3 = c.PCA_(self, x_train)           #principal component analysis (PCA)
+            #x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
+            #x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
+            #x_d2, x_d3 = s.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
+            x_d2, x_d3 = s.PCA_(self, x_train)           #principal component analysis (PCA)
             #x_d2, x_d3 = c.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
             colors = ['magenta', 'turquoise', 'brown', 'red', 'black', 'blue', 'cyan', 'green', 'orange', 'yellow',
-                      '#029386', '#9a0eea', '#00035b' , '#d1b26f', '#7e1e9c', '#ff81c0', '#650021', '#cea2fd', '#610023', '#033500' ]
+                      '#029386', '#9a0eea', '#00035b' , '#d1b2bf', '#7e1e9c', '#ff81c0', '#650021', '#c11afd', '#610023', '#033500' ]
                       #'teal', 'pink', 'purple', 'grey', 'violet', 'dark blue', 'tan', 'forest green', 'olive', '#01153e']
             #colors = ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19' ]
             markers = ['o', '^', 'D', '>', '*', 'p', 'P', '1', 'X', 's',
-                       'o', '^', 'D', '>', '*', 'p', 'P', '1', 'X', 's']
+                       'v', '8', 'h', '>', '|', '_', ',', '4', '2', '.']
             labels = ["1_asp", "2_sto", "3_ap_p", "4_ap_x", "5_ela", "6_kok", "7_opl", "8_mal",
                       "9_ger", "10_pis", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
             #clustering.plot_2d_3d("self", i, colors, markers, x_d2, y_train, target_values)
