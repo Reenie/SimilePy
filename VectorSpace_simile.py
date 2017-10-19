@@ -7,7 +7,7 @@ class VectorSpace_simile:
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
 
 
-    some_attr = [0, 1, 2, 5,  12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25]#it should be changed
+    some_attr = [ 5, 10,  12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25]#it should be changed
     numOfGenders = 2 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
