@@ -4,26 +4,26 @@ import timeit
 
 class XlsxToTxt:
     Files = ["",
-             "1_aspros_san_to_pani",
-             "2_stolismenos_san_fregata",
-             "3_apalos_san_poupoulo",
-             "4_apalos_san_xadi",
-             "5_elafrys_san_poupoulo",
-             "6_kokkinos_san_astakos",
-             "7_oplismenos_san_astakos",
-             "8_malakos_san_voutiro",
-             "9_geros_san_tavros",
-             "10_pistos_san_skilos",
-             "11_kokkinos_san_paparouna",
-             "12_ntimenos_san_astakos",
-             "13_kokkinos_san_to_pantzari",
-             "14_glikos_san_meli",
-             "15_aspros_san_to_gala",
-             "16_krios_san_ton_pago",
-             "17_grigoros_san_astrapi",
-             "18_mavros_san_skotadi",
-             "19_mperdemenos_san_to_kouvari",
-             "20_aspros_san_to_xioni"
+             "1_aspros_san_to_pani.1",
+             "2_stolismenos_san_fregata.1",
+             "3_apalos_san_poupoulo.1",
+             "4_apalos_san_xadi.1",
+             "5_elafrys_san_poupoulo.1",
+             "6_kokkinos_san_astakos.1",
+             "7_oplismenos_san_astakos.1",
+             "8_malakos_san_voutiro.1",
+             "9_geros_san_tavros.1",
+             "10_pistos_san_skilos.1",
+             "11_kokkinos_san_paparouna.1",
+             "12_ntimenos_san_astakos.1",
+             "13_kokkinos_san_to_pantzari.1",
+             "14_glikos_san_meli.1",
+             "15_aspros_san_to_gala.1",
+             "16_krios_san_ton_pago.1",
+             "17_grigoros_san_astrapi.1",
+             "18_mavros_san_skotadi.1",
+             "19_mperdemenos_san_to_kouvari.1",
+             "20_aspros_san_to_xioni.1"
              ]
 
     linux_dataset_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/"
@@ -31,7 +31,7 @@ class XlsxToTxt:
     dataset_path = win_dataset_path  # It should be changed according to pc
     txt_datapath = dataset_path + "txt/"
 
-    cellsForTXT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    cellsForTXT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,  11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
     headers = ["",  # 0
                "TEXT",  # 1
                "SIMILE",  # 2
@@ -39,31 +39,32 @@ class XlsxToTxt:
                "HEAD",  # 4
                "LEMMA",  # 5
                "MOD_PRED_SEMS",  # 6   MODIFIED PRED SEMS
-               "TEN_GEN_SEMS",  # 7  TENOR SEM GENERALISATION
-               "MWE_TYPE",  # 8
-               "PHENOMENON",  # 9
-               "DETERMINER",  # 10
-               "EMPM",  # 11
-               "EMPP",  # 12
-               "COMP",  # 13
-               "IWO",  # 14
-               "IXP-CREATIVE",  # 15
-               "IXP-EXPANSION",  # 16
-               "IXP-N",  # 17
-               "IXP-W", #18
-               "IXP-PUNC", #19
-               "MOD",  # 20
-               "AGR",  # 21
-               "MWO",  # 22
-               "VAR",  # 23
-               "AN"]  # 24
+               "GEN_SEMS",  #7     GENERALIZED SEMANTICS
+               "TEN_GEN_SEMS",  # 8  TENOR SEM GENERALISATION
+               "MWE_TYPE",  # 11
+               "PHENOMENON",  # 10
+               "DETERMINER",  # 11
+               "EMPM",  # 12
+               "EMPP",  # 13
+               "COMP",  # 14
+               "IWO",  # 15
+               "IXP-CREATIVE",  # 16
+               "IXP-EXPANSION",  # 17
+               "IXP-N",  # 18
+               "IXP-W", #19
+               "IXP-PUNC", #20
+               "MOD",  # 21
+               "AGR",  # 22
+               "MWO",  # 23
+               "VAR",  # 24
+               "AN"]  # 25
 
     def __init__(self):
         s = XlsxToTxt
         start = timeit.default_timer()
          #s.xlsx_to_txt("self", specificFile=11, cellsForTxt=s.cellsForTXT)
         #s.convertAllXlsxToTXT(self)
-        s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[2, 12, 13, 16, 17, 18])
+        s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[16])
         print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
     def convertAllXlsxToTXT(self):

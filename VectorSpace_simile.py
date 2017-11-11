@@ -3,44 +3,48 @@ import main
 
 class VectorSpace_simile:
     full_attr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26] #all atributes
-    attrWithMultipleCategoricalValues = [5, 6, 7, 8, 9, 10, 11] #numerical vector space has one feature for each categorical value
+    attrWithMultipleCategoricalValues = [5, 6, 7, 8, 9, 10, 11, 12] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
 
 
-    some_attr = [ 5, 10,  12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25]#it should be changed
-    numOfGenders = 2 #it should be changed to 3 or 2
+    syntactic_attr = [0, 1, 2, 5, 11] #attributes without GENDER, MWE_TYPE and SEMANTICS
+    semantic_attr = [0, 1, 2, 5, 9, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26]##attributes with GENDER, MWE_TYPE and SEMANTICS
+
+    some_attr = [  5, 9, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26]#it should be changed
+    numOfGenders = 3 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed
 
 
 
     txtHeaders = ["FILE",  #FILE 0
-               "XLSX_ROW", # 1
-               "TXT_ROW", #2
+               "XLSX_ROW",  # 1
+               "TXT_ROW",  #2
                "TEXT",  # 3
                "SIMILE",  # 4
-               "GENDER",  # 5
+               "GENDER",  # 5  YES
                "HEAD",  # 6
                "LEMMA",  # 7
                "MOD_PRED_SEMS",  # 8   MODIFIED PRED SEMS
-               "TEN_GEN_SEMS",  # 9  TENOR SEM GENERALISATION
-               "MWE_TYPE",  # 10
-               "PHENOMENON",  # 11
-               "DETERMINER",  # 12
-               "EMPM",  # 13
-               "EMPP",  # 14
-               "COMP",  # 15
-               "IWO",  # 16
-               "IXP-CREATIVE",  # 17
-               "IXP-EXPANSION",  # 18
-               "IXP-N",  # 19
-               "IXP-W",  # 20
-               "IXP-PUNC",  # 21
-               "MOD",  # 22
-               "AGR",  # 23
-               "MWO",  # 24
-               "VAR"  # 25
-                    ]
+                "SEMANTICS",  # 9 YES     GENERALIZED SEMANTICS
+               "TEN_GEN_SEMS",  # 10  TENOR SEM GENERALISATION
+               "MWE_TYPE",  # 11 YES
+               "PHENOMENON",  # 12
+               "DETERMINER",  # 13 YES
+               "EMPM",  # 14 YES
+               "EMPP",  # 15 YES
+               "COMP",  # 16 YES
+               "IWO",  # 17 YES
+               "IXP-CREATIVE",  # 18 YES
+               "IXP-EXPANSION",  # 19
+               "IXP-N",  # 20 YES
+               "IXP-W",  # 21 YES
+               "IXP-PUNC",  # 22 YES
+               "MOD",  # 23 YES
+               "AGR",  # 24 YES
+               "MWO",  # 25 YES
+               "VAR"  # 26 YES
+                  ]
 
 
 
@@ -74,6 +78,7 @@ class VectorSpace_simile:
                             rowVector = []
                             for c in attrForVectorSpace:
                                 if(s.txtHeaders[c]=='GENDER' and genders == 2 ):
+                                    #print(splited_row[0] + ", "+ splited_row[1] + ", " + splited_row[2] )
                                     if splited_row[c].strip() == "N":
                                         rowVector.append(splited_row[c].strip())
                                     elif splited_row[c].strip() == "M" or splited_row[c].strip() == "F" or splited_row[c].strip() == "M/F":
@@ -88,6 +93,8 @@ class VectorSpace_simile:
 
     def numericalVectorSpace(self, filenames, gender=numOfGenders):
         s = VectorSpace_simile #This class
+        ##################
+        #print(s.attrForVectorSpace)
         categoricalVS, categoricalFeature_names = s.featureMatrix("self", filenames, attrForVectorSpace=s.attrForVectorSpace)
         ############3
         #print(categoricalFeature_names)

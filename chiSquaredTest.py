@@ -1,20 +1,30 @@
 import pandas
+pandas.set_option('display.precision', 2)
+#pandas.describe()
+#pandas.set_option('display.max_columns', 17)
+#pandas.set_option('display.width', 500)
 import scipy.stats
 from scipy.stats.stats import pearsonr
 
 import VectorSpace_simile as vectorSpace_simile
 import main as main
 from Old.fileToMatrix import FileToMatrix
+import timeit
 
 
 class chiSquaredTest:
     def __init__(self):
         s = chiSquaredTest
+        start = timeit.default_timer()
         s.culcAndPrintChiSquereTest('self')
+        print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
 
 
     def culcAndPrintChiSquereTest(self):
+            #pandas.set_option('display.height', 1000)
+            #pandas.set_option('display.max_rows', 500)
+            pandas.set_option('display.width', 125)
             results, features_list, p_table_allFiles = chiSquaredTest.calcChiSquereTest('self')
             print("CHI-SQUARED TEST\n")
             print("\r\nIf p-value > 0.1 the features are independent")

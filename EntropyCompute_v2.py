@@ -3,13 +3,16 @@ import numpy as np
 import VectorSpace_simile
 import main as main
 import operator
+import timeit
 
 
 class EntropyCompute_v2:
     def __init__(self):
         s = EntropyCompute_v2
+        start = timeit.default_timer()
         s.calcAndPrintEntropyOfAllFiles_v2('self')
         s.calcAndPrintEntropyOfAllFiles('self')
+        print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
     def calcAndPrintEntropyOfAllFiles(self):
         s = EntropyCompute_v2
@@ -17,19 +20,19 @@ class EntropyCompute_v2:
             #print(file)
             entropy, normEntropy, KeyPercentageFreq, featureNames = s.calcEntropy(self, file)
             print("\r\n\r\n" + file)
-            print('%-14s%-9s%-19s%-12s' % ("Feature", "Entropy", "Normalized entropy", "Frequency of values"))
+            print('%-14s%-9s%-12s' % ("Feature", "Entropy", "Frequency of values"))
             for a, b, c, d in zip(entropy, normEntropy, KeyPercentageFreq, featureNames):
                 #cc = s.sortedArrayOfHashtable(self, c)
                 #cc = s.sort(key=lambda x: x[1])
-                cc = sorted(c, key=lambda x:(x[2]))
-                print('\r%-14s%-9s%-19s%-12s' % (d, a, b, cc))
+                cc = sorted(c, key=lambda x:(-x[2]))
+                print('\r%-14s%-9s%-12s' % (d, a, cc))
         entropy, normEntropy, KeyPercentageFreq, featureNames = s.calcEntropy_inWholeDataset(self, main.filenames)
         print("\r\n\r\nEntropy in Whole Dataset")
-        print('%-14s%-9s%-19s%-12s' % ("Feature", "Entropy", "Normalized entropy", "Frequency of values"))
+        print('%-14s%-9s%-12s' % ("Feature", "Entropy", "Frequency of values"))
         for a, b, c, d in zip(entropy, normEntropy, KeyPercentageFreq, featureNames):
             #cc = s.sortedArrayOfHashtable(self, c)
-            cc = sorted(c, key=lambda x:(x[2]))
-            print('\r%-14s%-9s%-19s%-12s' % (d, a, b, cc))
+            cc = sorted(c, key=lambda x:(-x[2]))
+            print('\r%-14s%-9s%-12s' % (d, a, cc))
 
 
     def calcAndPrintEntropyOfAllFiles_v2(self):
@@ -43,13 +46,14 @@ class EntropyCompute_v2:
             if flag_ofHeading == 0:
                 print("\r\n")
                 featureNames_tuple = tuple(featureNames)
-                print('%-4s%-7s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % (('Sim',) + featureNames_tuple))
+                #print(featureNames_tuple)
+                print('%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % (('Sim',) + featureNames_tuple))
                 flag_ofHeading = 1
-            ne_tuple = tuple(normEntropy)
-            print('\r%-4s%-7s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % ((count_file,) + ne_tuple))
+            ne_tuple = tuple(entropy)
+            print('\r%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % ((count_file,) + ne_tuple))
         entropy, normEntropy, KeyPercentageFreq, featureNames = s.calcEntropy_inWholeDataset(self, main.filenames)
-        normEntropy_tuple = tuple(normEntropy)
-        print('\r%-4s%-7s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % (('All',) + normEntropy_tuple))
+        normEntropy_tuple = tuple(entropy)
+        print('\r%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % (('All',) + normEntropy_tuple))
 
 
 
