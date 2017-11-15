@@ -6,11 +6,11 @@ class VectorSpace_simile:
     attrWithMultipleCategoricalValues = [5, 6, 7, 8, 9, 10, 11, 12] #numerical vector space has one feature for each categorical value
     attrWithNumericalValues = [0, 1, 2]  #numerical feature has the same value as the catigorical one
 
-
-    syntactic_attr = [0, 1, 2, 5, 11] #attributes without GENDER, MWE_TYPE and SEMANTICS
+    #[0, 1, 2, 5, 11, 15, 16, 18, 20, 22, 25]
+    syntactic_attr = [0, 1, 2, 5, 11, 15, 16, 18, 20, 22, 25] #[0, 1, 2, 5, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26] #attributes without GENDER, MWE_TYPE and SEMANTICS
     semantic_attr = [0, 1, 2, 5, 9, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26]##attributes with GENDER, MWE_TYPE and SEMANTICS
 
-    some_attr = [  5, 9, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26]#it should be changed
+    some_attr = [0, 1, 2, 5, 9, 11, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26]#it should be changed
     numOfGenders = 3 #it should be changed to 3 or 2
 
     attrForVectorSpace = some_attr #it should be changed

@@ -43,8 +43,8 @@ class Variability_Measure:
         #print(semantic_entropy_list)
         pearson_correlation = pearsonr(semantic_entropy_list, syntactic_entropy_list)
         #print(pearsonr([1, 2, 3, 4, 5, 6], [-6, -5, -4, -3, -2, -1]))
-        print("\nPearson_correlation(syntactic_entropy, semantic_entrophy) = " + str(round(pearson_correlation[0],4)) +
-              ",  p-value = " + str(round(pearson_correlation[1],4)))
+        print("\nPearson_correlation(syntactic_entropy, semantic_entrophy) = " + str(round(pearson_correlation[0],5)) +
+              ",  p-value = " + str(pearson_correlation[1]))
 
 
     def semanticEntropy_perSimile(self):

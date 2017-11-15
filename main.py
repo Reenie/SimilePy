@@ -8,10 +8,6 @@ dataset_path = win_dataset_path
 statistics_path = win_statistics_path
 
 
-
-
-
-
 filenames = ["1_aspros_san_to_pani.1.txt",
              "2_stolismenos_san_fregata.1.txt",
              "3_apalos_san_poupoulo.1.txt",

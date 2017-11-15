@@ -25,6 +25,7 @@ from sklearn import feature_extraction
 #import mpld3
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.cluster import KMeans, MeanShift
+from sklearn.datasets import make_blobs
 
 
 #classification and dimensionality reduction
@@ -32,7 +33,8 @@ class Clustering_simile:
     def __init__(self):
         s = Clustering_simile #this class
         start = time.time()
-        s.lda_plot_2d_3d('self', main.filenames)
+        #s.lda_plot_2d_3d('self', main.filenames)
+        s.kMeans(self)
         #s.lda_plot_2d_3d_perSimile('self', main.filenames[0])
         #s.kmeans_Clustering(self)
         end = time.time()
@@ -56,6 +58,72 @@ class Clustering_simile:
         plt.scatter(x_d3[:, 0], x_d3[:, 1], x_d3[:, 2], c=y_pred)
 
         plt.show()
+
+    #import numpy as np
+    #import matplotlib.pyplot as plt
+
+    #from sklearn.cluster import KMeans
+    #from sklearn.datasets import make_blobs
+    def kMeans(self, filenames = main.filenames):
+        s = Clustering_simile
+        plt.figure(figsize=(12, 12))
+        #n_samples = 1500
+        random_state = 170
+        #X, y = make_blobs(n_samples=n_samples, random_state=random_state)
+        x_train, x_test, y_train, y_test, target_values, feature_names = s.readAndSplitData(self, 1, filenames)
+        #x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
+        #x_d2, x_d3 = s.LDA(self, x_train, y_train)  #Linear Discriminant Analysis
+        #x_d2, x_d3 = s.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
+        x_d2, x_d3 = s.PCA_(self, x_train)  # principal component analysis (PCA)
+        #x_d2, x_d3 = s.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
+        ############
+        #for i in x_d2:
+        #    print(i)
+
+        #X = x_d2[:, 3:]
+        X = x_d2
+        #n_samples = len(X)
+        #y = y_train
+        # Incorrect number of clusters
+        y_pred = KMeans(n_clusters=20, random_state=random_state).fit_predict(X)
+        ############
+        #for j in y_pred:
+        #    print(j)
+
+        #plt.subplot(222)
+        plt.scatter(X[:, 0], X[:, 1], c=y_pred)
+        plt.title("Clustering")
+        plt.show()
+        '''
+        # Anisotropicly distributed data
+        transformation = [[0.60834549, -0.63667341], [-0.40887718, 0.85253229]]
+        X_aniso = np.dot(X, transformation)
+        y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_aniso)
+
+        plt.subplot(222)
+        plt.scatter(X_aniso[:, 0], X_aniso[:, 1], c=y_pred)
+        plt.title("Anisotropicly Distributed Blobs")
+
+        # Different variance
+        X_varied, y_varied = make_blobs(n_samples=n_samples,
+                                    cluster_std=[1.0, 2.5, 0.5],
+                                    random_state=random_state)
+        y_pred = KMeans(n_clusters=3, random_state=random_state).fit_predict(X_varied)
+
+        plt.subplot(223)
+        plt.scatter(X_varied[:, 0], X_varied[:, 1], c=y_pred)
+        plt.title("Unequal Variance")
+
+        # Unevenly sized blobs
+        X_filtered = np.vstack((X[y == 0][:500], X[y == 1][:100], X[y == 2][:10]))
+        y_pred = KMeans(n_clusters=3,
+                    random_state=random_state).fit_predict(X_filtered)
+
+        plt.subplot(224)
+        plt.scatter(X_filtered[:, 0], X_filtered[:, 1], c=y_pred)
+        plt.title("Unevenly Sized Blobs")
+        '''
+
 
 
     def lda_plot_2d_3d(self, filenames = main.filenames):
@@ -96,17 +164,20 @@ class Clustering_simile:
             plt.title('SIMILE (3D)')
             plt.show()
 
+
+
+
     def lda_plot_2d_3d_perSimile(self, filename=main.filenames[1]):
             s = Clustering_simile  # this class
             figure_number = 0
             for i in range(1):
                 figure_number += 2
                 x_train, x_test, y_train, y_test, target_values, featureNames = s.readAndSplitData('self', 1, [filename])
-                x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
+                #x_d2, x_d3 = s.LSA(self, x_train)           #Latent Semantic Analysis
                 #x_d2, x_d3 = s.LDA(self, x_train, y_train)  # Linear Discriminant Analysis
-                # x_d2, x_d3 = c.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
-                #x_d2, x_d3 = s.PCA_(self, x_train)           #principal component analysis (PCA)
-                #_d2, x_d3 = s.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
+                #x_d2, x_d3 = s.NMF_(self, x_train, y_train) # Non-Negative Matrix Factorization
+                x_d2, x_d3 = s.PCA_(self, x_train)           #principal component analysis (PCA)
+                #x_d2, x_d3 = s.KPCA(self, x_train)           # Kernel principal component analysis (KPCA)
                 color = 'magenta'
                 # 'teal', 'pink', 'purple', 'grey', 'violet', 'dark blue', 'tan', 'forest green', 'olive', '#01153e']
                 # colors = ['c0', 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16', 'c17', 'c18', 'c19' ]
@@ -128,6 +199,9 @@ class Clustering_simile:
                 plt.legend(loc='best', shadow=False, scatterpoints=1)
                 plt.title('SIMILE (3D)')
                 plt.show()
+
+
+
 
 
 
