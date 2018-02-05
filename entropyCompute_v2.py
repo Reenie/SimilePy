@@ -47,13 +47,13 @@ class EntropyCompute_v2:
                 print("\r\n")
                 featureNames_tuple = tuple(featureNames)
                 #print(featureNames_tuple)
-                print('%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % (('Sim',) + featureNames_tuple))
+                print('%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s%-6s%-5s' % (('Sim',) + featureNames_tuple))
                 flag_ofHeading = 1
             ne_tuple = tuple(entropy)
-            print('\r%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % ((count_file,) + ne_tuple))
+            print('\r%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s%-6s%-5s' % ((count_file,) + ne_tuple))
         entropy, normEntropy, KeyPercentageFreq, featureNames = s.calcEntropy_inWholeDataset(self, main.filenames)
         normEntropy_tuple = tuple(entropy)
-        print('\r%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s' % (('All',) + normEntropy_tuple))
+        print('\r%-4s%-7s%-10s%-9s%-11s%-6s%-6s%-6s%-6s%-13s%-6s%-7s%-9s%-6s%-6s%-6s%-5s%-6s%-5s' % (('All',) + normEntropy_tuple))
 
 
 

@@ -4,26 +4,26 @@ import timeit
 
 class XlsxToTxt:
     Files = ["",
-             "1_aspros_san_to_pani.1",
-             "2_stolismenos_san_fregata.1",
-             "3_apalos_san_poupoulo.1",
-             "4_apalos_san_xadi.1",
-             "5_elafrys_san_poupoulo.1",
-             "6_kokkinos_san_astakos.1",
-             "7_oplismenos_san_astakos.1",
-             "8_malakos_san_voutiro.1",
-             "9_geros_san_tavros.1",
-             "10_pistos_san_skilos.1",
-             "11_kokkinos_san_paparouna.1",
-             "12_ntimenos_san_astakos.1",
-             "13_kokkinos_san_to_pantzari.1",
-             "14_glikos_san_meli.1",
-             "15_aspros_san_to_gala.1",
-             "16_krios_san_ton_pago.1",
-             "17_grigoros_san_astrapi.1",
-             "18_mavros_san_skotadi.1",
-             "19_mperdemenos_san_to_kouvari.1",
-             "20_aspros_san_to_xioni.1"
+             "1_aspros_san_to_pani.2",
+             "2_stolismenos_san_fregata.2",
+             "3_apalos_san_poupoulo.2",
+             "4_apalos_san_xadi.2",
+             "5_elafrys_san_poupoulo.2",
+             "6_kokkinos_san_astakos.2",
+             "7_oplismenos_san_astakos.2",
+             "8_malakos_san_voutiro.2",
+             "9_geros_san_tavros.2",
+             "10_pistos_san_skilos.2",
+             "11_kokkinos_san_paparouna.2",
+             "12_ntimenos_san_astakos.2",
+             "13_kokkinos_san_to_pantzari.2",
+             "14_glikos_san_meli.2",
+             "15_aspros_san_to_gala.2",
+             "16_krios_san_ton_pago.2",
+             "17_grigoros_san_astrapi.2",
+             "18_mavros_san_skotadi.2",
+             "19_mperdemenos_san_to_kouvari.2",
+             "20_aspros_san_to_xioni.2"
              ]
 
     linux_dataset_path = "/home/pkouris/Dropbox/EMP_DID_dropbox/NLP/SIMILES/dataset/"
@@ -31,7 +31,7 @@ class XlsxToTxt:
     dataset_path = win_dataset_path  # It should be changed according to pc
     txt_datapath = dataset_path + "txt/"
 
-    cellsForTXT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,  11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    cellsForTXT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,  11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
     headers = ["",  # 0
                "TEXT",  # 1
                "SIMILE",  # 2
@@ -51,20 +51,22 @@ class XlsxToTxt:
                "IXP-CREATIVE",  # 16
                "IXP-EXPANSION",  # 17
                "IXP-N",  # 18
-               "IXP-W", #19
-               "IXP-PUNC", #20
+               "IXP-W", # 19
+               "IXP-PUNC", # 20
                "MOD",  # 21
                "AGR",  # 22
                "MWO",  # 23
                "VAR",  # 24
-               "AN"]  # 25
+               "TOSO", # 25
+               "CONSTR", # 26
+               "AN"]  # 27
 
     def __init__(self):
         s = XlsxToTxt
         start = timeit.default_timer()
          #s.xlsx_to_txt("self", specificFile=11, cellsForTxt=s.cellsForTXT)
-        #s.convertAllXlsxToTXT(self)
-        s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[16])
+        s.convertAllXlsxToTXT(self)
+        #s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[16])
         print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
     def convertAllXlsxToTXT(self):
