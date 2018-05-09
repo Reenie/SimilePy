@@ -30,6 +30,7 @@ from sklearn.datasets import make_blobs
 
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
+import mca
 from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
 
@@ -452,6 +453,27 @@ class Clustering_simile:
         #m_d3 = PCA(n_components=3, svd_solver='randomized')
         #x_d3 = m_d3.fit_transform(x_train)
         return x_d2 #x_d3
+
+        # Principal component analysis (PCA)
+    def MCA_test(self, x_train):
+        #m_d2 = PCA(n_components=2, svd_solver='randomized')
+        #x_d2 = m_d2.fit_transform(x_train)
+        x= [
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+             0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+             0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0,
+             0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0],
+            [1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1,
+             0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0],
+            [1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1,
+             1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0]
+        ]
+       # mds = MDS(n_components=2, metric=True, n_init=4, max_iter=300, verbose=0, eps=0.001, n_jobs=1, random_state=None, dissimilarity='euclidean')
+       # mds.fit(X)
+       # return X
+        #return x_d2  # x_d3
 
 
     #Non-Negative Matrix Factorization
