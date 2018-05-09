@@ -41,7 +41,7 @@ class Clustering_simile:
         s = Clustering_simile #this class
         start = time.time()
         #s.lda_plot_2d_3d('self', main.filenames)
-        s.clustering(self, clusters = 12, filenames= main.filenames, size_figure = (8, 6), random_state = 170, max_iter = 1000)
+        s.clustering(self, clusters = 7, filenames= main.filenames, size_figure = (8, 5), random_state = 170, max_iter = 10000)
         #s.DBScan(self, filenames=main.filenames)
         #s.lda_plot_2d_3d_perSimile('self', main.filenames[0])
         #s.kmeans_Clustering(self)
@@ -50,7 +50,7 @@ class Clustering_simile:
 
 
 
-    def clustering(self, clusters = 5, filenames= main.filenames, size_figure = (6, 6), random_state = 170, max_iter = 300):
+    def clustering(self, clusters = 4, filenames= main.filenames, size_figure = (6, 6), random_state = 170, max_iter = 300):
         s = Clustering_simile
         clustering_results, X, y_pred, y_train, target_values, feature_names, \
         featureValues_frequency_perCluster, distinct_vectors_perCluster = \

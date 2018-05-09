@@ -64,9 +64,9 @@ class XlsxToTxt:
     def __init__(self):
         s = XlsxToTxt
         start = timeit.default_timer()
-         #s.xlsx_to_txt("self", specificFile=11, cellsForTxt=s.cellsForTXT)
-        s.convertAllXlsxToTXT(self)
-        #s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[16])
+        #s.xlsx_to_txt("self", specificFile=11, cellsForTxt=s.cellsForTXT)
+        #s.convertAllXlsxToTXT(self)
+        s.convertRangeOfXlsxToTXT(self, rangeOfXlsxFilse=[20])
         print(str(round(timeit.default_timer() - start, 3)) + " sec")
 
     def convertAllXlsxToTXT(self):
